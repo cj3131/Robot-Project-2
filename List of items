@@ -1,0 +1,31 @@
+import csv
+import sys
+
+"Name" , "Brand" , "Price" , "Rating"
+
+1,"MacBook", "Apple", "800", "9/10"
+2,"Pavilion", "HP", "400", "8/10"
+3,"Zenbook", "ASUS", "500", "8/10"
+4,"Aspire", "Acer", "600", "8/10"
+5,"Chromebook", "Acer", "200", "7/10"
+6,"IdeaPad", "LENOVO", "150", "6/10"
+7,"Surface", "Microsoft", "500", "8/10"
+8,"EeeBook", "ASUS", "200", "8/10"
+
+1,"iPhone", "Apple", "500", "9/10"
+2,"Galaxy", "Samsung", "400", "9/10"
+3,"Lumia", "Microsoft", "100", "9/10"
+4,"Nexus", "LG", "300", "8/10"
+5,"Moto G", "Motorola", "200", "8/10"
+6,"Xperia", "Sony", "400", "8/10"
+7,"G4", "LG", "200", "8/10"
+8,"PRIV", "BlackBerry", "500", "8/10"
+
+1,"PS3", "Playstation", "200", "9/10"
+2,"PS4", "PlayStation", "300", "9/10"
+3,"XBOX360", "XBOX", "200", "9/10"
+4,"XBOX1", "XBOX", "300", "8/10"
+5,"WII", "Nintendo", "30", "9/10"
+6,"WIIU", "Nintendo", "200", "9/10"
+7,"DS", "Nintendo", "70", "8/10"
+8,"3DS", "Nintendo", "90", "8/10"
