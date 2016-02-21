@@ -24,6 +24,7 @@ gameDisplay = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption("This is the window's title")
 clock = pygame.time.Clock()
 fps = 60
+
 spriteGroup = pygame.sprite.Group()
 
 #Load player character images
@@ -42,33 +43,57 @@ northRightImg = pygame.image.load('northfacingright.png')
 southImg = pygame.image.load('southfacing.png')
 southLeftImg = pygame.image.load('southfacingleft.png')
 southRightImg = pygame.image.load('southfacingright.png')
+
 mapImg = pygame.image.load('mainMap.png')
 
-class Camera(object):
-    def __init__(self, cameraFunc, width, height):
-        self.cameraFunc = cameraFunc
-        self.state = pygame.rect.Rect((0, 0, width, height))
-
-    def apply(self, target):
-
-        return target.rect.move(self.state.topleft)
+##class Camera(object):
+##    def __init__(self, cameraFunc, width, height):
+##        self.cameraFunc = cameraFunc
+##        self.state = pygame.rect.Rect((0, 0, width, height))
+##
+##    def apply(self, target):
+##
+##        return target.rect.move(self.state.topleft)
+##    
+##    def update(self, target):
+##        self.state = self.cameraFunc(self.state, target.rect)
+class Level:
     
-    def update(self, target):
-        self.state = self.cameraFunc(self.state, target.rect)
+    def __init__(self):
 
-##class Entity(pygame.sprite.Sprite):
-##    def __init__(self):
-##        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((1600,960))
+        self.rect = self.image.get_rect()
+        self.worldShiftx = 0
+        self.leftViewbox = halfWidth - displayWidth/8
+        self.rightViewbox = halfWidth + displayWidth/8
 
+    def shiftWorld(self, shiftx):
+
+        self.worldShiftx += shiftx
+        self.rect.x += shiftx
+        gameDisplay.blit(mapImg,(self.rect.x,0))
+        
+
+##def runViewbox(x,y,background):
+##    if (x <= background.leftViewbox):
+##        viewDifference = background.leftViewbox - x
+##        x = background.leftViewbox
+##        background.shiftWorld(viewDifference)
+##    if (x >= background.leftViewbox):
+##        viewDifference = background.rightViewbox - x
+##        x = background.rightViewbox
+##        background.shiftWorld(viewDifference)
+##    return x,y
+    
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((32, 32))
         self.image.fill(blue)
         self.rect = self.image.get_rect()
-        self.sound = pygame.mixer.Sound("walking.wav")
         self.xchange = 0
         self.ychange = 0
+        self.sound = pygame.mixer.Sound("walking.wav")
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -174,13 +199,7 @@ class Player(pygame.sprite.Sprite):
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(30)
-                    t += 1
-
-def simpleCamera(camera, targetRect):
-    l, t, _, _ = targetRect
-    _, _, w, h = camera
-    return pygame.Rect(-1 + halfWidth, -t + halfHeight, w, h)
-                
+                    t += 1                
 
         
 def button(msg,x,y,w,h,ic,ac,action=None):
@@ -225,10 +244,10 @@ def gameIntro():
 
         
 def gameLoop():
+    background = Level()
     pc = Player()
     pc.setImage("southfacing.png")
     pc.setPosition(193,97)
-    
     spriteGroup.add(pc)
     spriteGroup.draw(gameDisplay)
     
@@ -236,13 +255,15 @@ def gameLoop():
     moving = None
     x = (displayWidth * 0.45)
     y = (displayHeight * 0.8)
-    #camera = Camera(simpleCamera, displayWidth, displayHeight)
     gameDisplay.blit(mapImg,(0,0))
     run = True
     while run:
+        #pc.rect.x, pc.rect.y = runViewbox(pc.rect.x, pc.rect.y, background)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
+                quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     facing = westImg
@@ -263,20 +284,7 @@ def gameLoop():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     moving = None
-                    
-        #gameDisplay.fill(white)
-##        if moving == True and facing == westImg:
-##            move(westImg,x,y,camera)
-##            x -= 32
-##        if moving == True and facing == eastImg:
-##            move(eastImg,x,y,camera)
-##            x += 32
-##        if moving == True and facing == northImg:
-##            move(northImg,x,y,camera)
-##            y -= 32
-##        if moving == True and facing == southImg:
-##            move(southImg,x,y,camera)
-##            y += 32
+
         if moving == None:
             spriteGroup.draw(gameDisplay)
             #gameDisplay.blit(facing, (x,y))
@@ -284,10 +292,10 @@ def gameLoop():
 
         clock.tick(fps)
         #window.fill(white)
-        pygame.display.update
+        #pygame.display.update
         
 gameIntro()
-gameLoop()
+#gameLoop()
 pygame.quit()
 quit()
         
