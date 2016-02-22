@@ -25,7 +25,7 @@ brightGreen = (0,255,0)
 #Initialise screen
 pygame.init()
 gameDisplay = pygame.display.set_mode((displayWidth, displayHeight))
-pygame.display.set_caption("This is the window's title")
+pygame.display.set_caption("Bargain Hunter!")
 clock = pygame.time.Clock()
 fps = 60
 
@@ -49,6 +49,8 @@ southLeftImg = pygame.image.load('southfacingleft.png')
 southRightImg = pygame.image.load('southfacingright.png')
 
 mapImg = pygame.image.load('mainMap.png')
+
+startImg = pygame.image.load('startmenu.png')
 
 ##class Camera(object):
 ##    def __init__(self, cameraFunc, width, height):
@@ -97,7 +99,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.xchange = 0
         self.ychange = 0
-        self.sound = pygame.mixer.Sound("walking.wav")
+        #self.sound = pygame.mixer.Sound("walking.wav")
         self.sector = "topleft"
         self.collided = False
         self.quadrant = (0,0)
@@ -311,20 +313,20 @@ class Player(pygame.sprite.Sprite):
                     t += 1                
 
         
-def button(msg,x,y,w,h,ic,ac,action=None):
+def button(x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x+w > mouse[0] > x and y + 50 > mouse[1] > y:
-        pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
+        #pygame.draw.rect(gameDisplay, (x,y,w,h))
         if click[0] == 1 and action != None:
             action()
-    else:
-        pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
-    font = pygame.font.Font("freesansbold.ttf", 20)
-    text = font.render(msg, 1, (10,10,10))
-    textRect = text.get_rect()
-    textRect.center = ((x+(w/2)), (y+(h/2)))
-    gameDisplay.blit(text, textRect)
+    #else:
+        #pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
+    #font = pygame.font.Font("freesansbold.ttf", 20)
+    #text = font.render(msg, 1, (10,10,10))
+    #textRect = text.get_rect()
+    #textRect.center = ((x+(w/2)), (y+(h/2)))
+    #gameDisplay.blit(text, textRect)
 
 def quitGame():
     pygame.quit()
@@ -344,16 +346,17 @@ def gameIntro():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            gameDisplay.fill(white)
-            writeText('Game Title','freesansbold.ttf',100,(displayWidth/2),(displayHeight/2))
-            button("Start",150,450,100,50,green,brightGreen,gameLoop)
-            button("Exit",550,450,100,50,red,brightRed,quitGame)
+            gameDisplay.fill(white)    
+            gameDisplay.blit (startImg, (0,0))
+            button (5,526,800,600,gameLoop)
+            button (438,526,800,600,quitGame)
             pygame.display.update()
             clock.tick(15)
 
         
 def gameLoop():
     #background = Level()
+    gameDisplay.fill(white)
     pc = Player()
     pc.setImage("southfacing.png")
     pc.setPosition(193,97)
