@@ -31,7 +31,7 @@ fps = 60
 
 spriteGroup = pygame.sprite.Group()
 
-#Load player character images
+#Load player character, map, and menu images
 eastImg = pygame.image.load('eastfacing.png')
 eastLeftImg = pygame.image.load('eastfacingleft.png')
 eastRightImg = pygame.image.load('eastfacingright.png')
@@ -48,21 +48,9 @@ southImg = pygame.image.load('southfacing.png')
 southLeftImg = pygame.image.load('southfacingleft.png')
 southRightImg = pygame.image.load('southfacingright.png')
 
-mapImg = pygame.image.load('mainMap.png')
-
+mapImg = pygame.image.load('mainmap.png')
 startImg = pygame.image.load('startmenu.png')
 
-##class Camera(object):
-##    def __init__(self, cameraFunc, width, height):
-##        self.cameraFunc = cameraFunc
-##        self.state = pygame.rect.Rect((0, 0, width, height))
-##
-##    def apply(self, target):
-##
-##        return target.rect.move(self.state.topleft)
-##    
-##    def update(self, target):
-##        self.state = self.cameraFunc(self.state, target.rect)
 class Level:
     
     def __init__(self):
@@ -78,18 +66,6 @@ class Level:
         self.worldShiftx += shiftx
         self.rect.x += shiftx
         gameDisplay.blit(mapImg,(self.rect.x,0))
-        
-
-##def runViewbox(x,y,background):
-##    if (x <= background.leftViewbox):
-##        viewDifference = background.leftViewbox - x
-##        x = background.leftViewbox
-##        background.shiftWorld(viewDifference)
-##    if (x >= background.leftViewbox):
-##        viewDifference = background.rightViewbox - x
-##        x = background.rightViewbox
-##        background.shiftWorld(viewDifference)
-##    return x,y
     
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -316,17 +292,9 @@ class Player(pygame.sprite.Sprite):
 def button(x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    if x+w > mouse[0] > x and y + 50 > mouse[1] > y:
-        #pygame.draw.rect(gameDisplay, (x,y,w,h))
+    if x + w > mouse[0] > x and y + 48 > mouse[1] > y:
         if click[0] == 1 and action != None:
             action()
-    #else:
-        #pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
-    #font = pygame.font.Font("freesansbold.ttf", 20)
-    #text = font.render(msg, 1, (10,10,10))
-    #textRect = text.get_rect()
-    #textRect.center = ((x+(w/2)), (y+(h/2)))
-    #gameDisplay.blit(text, textRect)
 
 def quitGame():
     pygame.quit()
@@ -370,7 +338,6 @@ def gameLoop():
     gameDisplay.blit(mapImg,(0,0))
     run = True
     while run:
-        #pc.rect.x, pc.rect.y = runViewbox(pc.rect.x, pc.rect.y, background)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
