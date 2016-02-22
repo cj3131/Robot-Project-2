@@ -348,8 +348,8 @@ def gameIntro():
                 quit()
             gameDisplay.fill(white)    
             gameDisplay.blit (startImg, (0,0))
-            button (5,526,800,600,gameLoop)
-            button (438,526,800,600,quitGame)
+            button (5,526,105,48,gameLoop)
+            button (438,526,105,48,quitGame)
             pygame.display.update()
             clock.tick(15)
 
