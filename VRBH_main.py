@@ -7,10 +7,6 @@ displayWidth = 800
 displayHeight = 600
 halfWidth = 400
 halfHeight = 300
-quadOne = (0,0)
-quadTwo = (-800,0)
-quadThree = (0,-360)
-quadFour = (-800,-360)
 
 #colour definition
 black = (0,0,0)
@@ -50,6 +46,7 @@ southRightImg = pygame.image.load('southfacingright.png')
 
 mapImg = pygame.image.load('mainMap.png')
 
+startImg = pygame.image.load('startmenu.png')
 ##class Camera(object):
 ##    def __init__(self, cameraFunc, width, height):
 ##        self.cameraFunc = cameraFunc
@@ -97,10 +94,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.xchange = 0
         self.ychange = 0
-        self.sound = pygame.mixer.Sound("walking.wav")
-        self.sector = "topleft"
-        self.collided = False
-        self.quadrant = (0,0)
+        #self.sound = pygame.mixer.Sound("walking.wav")
+        self.sector = None
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -141,78 +136,14 @@ class Player(pygame.sprite.Sprite):
             imgThree = northRightImg
             xChange = 0
             yChange = -1
-            
         if self.sector == "topleft":
-            if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) < 65:
+            if (self.rect.x + xChange) < 65 or (self.rect.x + xChange) > 737 or (self.rect.y + yChange) < 65 or (self.rect.y + yChange) > 833:
                 print("collided")
-                self.collided = True
-                self.quadrant = (0,0)
-            elif (self.rect.x + xChange) > 769:
-                self.sector = "topright"
-                self.rect.x = -31
-                self.collided = False
-            elif (self.rect.y +yChange) > 569:
-                self.sector = "bottomleft"
-                self.rect.y = 209
-                self.collided = False
-            else:
-                self.collided = False
-                
-        elif self.sector == "topright":
-            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 97:
-                print("collided")
-                self.collided = True
-                self.quadrant = (-800,0)
-            elif (self.rect.x + xChange) < 1:
-                self.sector = "topleft"
-                self.rect.x = 801
-                self.collided = False
-            elif (self.rect.y + yChange) > 569:
-                self.sector = "bottomright"
-                self.rect.y = 1
-                self.collided = False
-            else:
-                self.collided = False
-
-        elif self.sector == "bottomleft":
-            if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) > 473:
-                print("collided")
-                self.collided = True
-                self.quadrant = (0,-360)
-            elif (self.rect.x + xChange) > 768:
-                self.sector = "bottomright"
-                self.rect.x = 1
-                self.collided = False
-            elif (self.rect.y + yChange) < 1:
-                self.sector = "topleft"
-                self.rect.y = 331
-                self.collided = False
-            else:
-                self.collided = False
-
-        elif self.sector == "bottomright":
-            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 473:
-                print("collided")
-                self.collided = True
-                self.quadrant = (-800,-360)
-            elif (self.rect.x + xChange) < 1:
-                self.sector = "bottomleft"
-                self.rect.x = 801
-                self.collided = False
-            elif (self.rect.y + yChange) < 1:
-                self.sector = "topright"
-                self.rect.y = 369
-                self.collided = False
-            else:
-                self.collided = False
-
-        if self.collided == True:
-            self.image = imgOne
-            gameDisplay.fill(white)
-            gameDisplay.blit(mapImg,(self.quadrant))
-            spriteGroup.draw(gameDisplay)
-            pygame.display.update()
-
+                self.image = imgOne
+                gameDisplay.fill(white)
+                gameDisplay.blit(mapImg,(0,0))
+                spriteGroup.draw(gameDisplay)
+                pygame.display.update()
         else:
             while t < 31:
                 for i in range(4):
@@ -224,19 +155,18 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
+                    if self.rect.x <= 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
+                    elif self.rect.x > 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
+                    elif self.rect.x <= 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (0,-360))
-                    elif self.sector == "bottomright":
+                    elif self.rect.x > 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (-800,-360))
                         
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
-                    pygame.time.delay(20)
+                    pygame.time.delay(30)
                     t += 1
                 #self.playSound()
                 for i in range(4):
@@ -248,20 +178,17 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
+                    if self.rect.x <= 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
+                    elif self.rect.x > 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
+                    elif self.rect.x <= 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (0,-360))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
-
+                    elif self.rect.x > 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
-                    pygame.time.delay(20)
+                    pygame.time.delay(30)
                     t += 1
                 for i in range(4):
                     self.rect.x += xChange
@@ -272,19 +199,17 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
+                    if self.rect.x <= 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
+                    elif self.rect.x > 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
+                    elif self.rect.x <= 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (0,-360))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
-                        
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
-                    pygame.time.delay(20)
+                    pygame.time.delay(30)
                     t += 1
                 for i in range (4):
                     self.rect.x += xChange
@@ -295,36 +220,34 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
+                    if self.rect.x <= 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
+                    elif self.rect.x > 769 and self.rect.y <= 569:
                         gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
+                    elif self.rect.x <= 769 and self.rect.y > 569:
                         gameDisplay.blit(mapImg, (0,-360))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
-                        
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
-                    pygame.time.delay(20)
+                    pygame.time.delay(30)
                     t += 1                
 
         
-def button(msg,x,y,w,h,ic,ac,action=None):
+def button(x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     if x+w > mouse[0] > x and y + 50 > mouse[1] > y:
-        pygame.draw.rect(gameDisplay, ac, (x,y,w,h))
+        #pygame.draw.rect(gameDisplay, (x,y,w,h))
         if click[0] == 1 and action != None:
             action()
-    else:
-        pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
-    font = pygame.font.Font("freesansbold.ttf", 20)
-    text = font.render(msg, 1, (10,10,10))
-    textRect = text.get_rect()
-    textRect.center = ((x+(w/2)), (y+(h/2)))
-    gameDisplay.blit(text, textRect)
+    #else:
+        #pygame.draw.rect(gameDisplay,(x,y,w,h))
+    #font = pygame.font.Font("freesansbold.ttf", 20)
+    #text = font.render(msg, 1, (10,10,10))
+    #textRect = text.get_rect()
+    #textRect.center = ((x+(w/2)), (y+(h/2)))
+    #gameDisplay.blit(text, textRect)
 
 def quitGame():
     pygame.quit()
@@ -345,15 +268,16 @@ def gameIntro():
                 pygame.quit()
                 quit()
             gameDisplay.fill(white)
-            writeText('Game Title','freesansbold.ttf',100,(displayWidth/2),(displayHeight/2))
-            button("Start",150,450,100,50,green,brightGreen,gameLoop)
-            button("Exit",550,450,100,50,red,brightRed,quitGame)
+            gameDisplay.blit (startImg,(0,0))
+            button(5,526,800,600,gameLoop)
+            button (438,526,800,600,quitGame)
             pygame.display.update()
             clock.tick(15)
-
+            
         
 def gameLoop():
     #background = Level()
+    gameDisplay.fill(white)
     pc = Player()
     pc.setImage("southfacing.png")
     pc.setPosition(193,97)
@@ -404,3 +328,4 @@ gameIntro()
 #gameLoop()
 pygame.quit()
 quit()
+        
