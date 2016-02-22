@@ -1,9 +1,11 @@
 # VRBH-Project-2
 
-A mini RPG built with Python and pygame, where the player needs to collect of bargain items by recruiting NPC's around the world.
+A mini RPG built with Python and pygame, where the player needs to collect bargain items by recruiting NPC's around the world.
 
 Program requirements:
 Python 3.4 or later. Pygame library
+
+![screenshot](https://raw.githubusercontent.com/cj3131/C5-Robot-Project-2/master/wholemap.png)
 
 Group work requirements: (contributed to 75% of project marks)
 
