@@ -94,6 +94,7 @@ class Player(pygame.sprite.Sprite):
         self.xchange = 0
         self.ychange = 0
         self.sound = pygame.mixer.Sound("walking.wav")
+        self.sector = None
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -134,13 +135,14 @@ class Player(pygame.sprite.Sprite):
             imgThree = northRightImg
             xChange = 0
             yChange = -1
-        if (self.rect.x + xChange) < 65 or (self.rect.x + xChange) > 704 or (self.rect.y + yChange) < 65 or (self.rect.y + yChange) > 833:
-            print("collided")
-            self.image = imgOne
-            gameDisplay.fill(white)
-            gameDisplay.blit(mapImg,(0,0))
-            spriteGroup.draw(gameDisplay)
-            pygame.display.update()
+        if self.sector == "topleft":
+            if (self.rect.x + xChange) < 65 or (self.rect.x + xChange) > 737 or (self.rect.y + yChange) < 65 or (self.rect.y + yChange) > 833:
+                print("collided")
+                self.image = imgOne
+                gameDisplay.fill(white)
+                gameDisplay.blit(mapImg,(0,0))
+                spriteGroup.draw(gameDisplay)
+                pygame.display.update()
         else:
             while t < 31:
                 for i in range(4):
@@ -152,7 +154,15 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    gameDisplay.blit(mapImg,(0,0))
+                    if self.rect.x <= 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (0,0))
+                    elif self.rect.x > 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (-800,0))
+                    elif self.rect.x <= 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (0,-360))
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))
+                        
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(30)
@@ -167,7 +177,14 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    gameDisplay.blit(mapImg,(0,0))
+                    if self.rect.x <= 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (0,0))
+                    elif self.rect.x > 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (-800,0))
+                    elif self.rect.x <= 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (0,-360))
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(30)
@@ -181,7 +198,14 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    gameDisplay.blit(mapImg,(0,0))
+                    if self.rect.x <= 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (0,0))
+                    elif self.rect.x > 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (-800,0))
+                    elif self.rect.x <= 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (0,-360))
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(30)
@@ -195,7 +219,14 @@ class Player(pygame.sprite.Sprite):
                     self.rect.x = xtemp
                     self.rect.y = ytemp
                     gameDisplay.fill(white)
-                    gameDisplay.blit(mapImg,(0,0))
+                    if self.rect.x <= 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (0,0))
+                    elif self.rect.x > 769 and self.rect.y <= 569:
+                        gameDisplay.blit(mapImg, (-800,0))
+                    elif self.rect.x <= 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (0,-360))
+                    elif self.rect.x > 769 and self.rect.y > 569:
+                        gameDisplay.blit(mapImg, (-800,-360))                    
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(30)
@@ -244,7 +275,7 @@ def gameIntro():
 
         
 def gameLoop():
-    background = Level()
+    #background = Level()
     pc = Player()
     pc.setImage("southfacing.png")
     pc.setPosition(193,97)
@@ -287,12 +318,9 @@ def gameLoop():
 
         if moving == None:
             spriteGroup.draw(gameDisplay)
-            #gameDisplay.blit(facing, (x,y))
             pygame.display.update()
 
         clock.tick(fps)
-        #window.fill(white)
-        #pygame.display.update
         
 gameIntro()
 #gameLoop()
