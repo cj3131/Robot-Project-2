@@ -2,115 +2,38 @@ House art: http://opengameart.org/content/house-sets - Shepardskin - https://twi
 
 Player character: http://opengameart.org/content/alternate-lpc-character-sprites-george - sheep -http://sheep.art.pl/
 
-Map tiles: http://opengameart.org/content/lpc-tile-atlas 	-  Casper Nilsson
+Map tiles: http://opengameart.org/content/lpc-tile-atlas    -  Casper Nilsson
 																email: casper.nilsson@gmail.com
 																Freenode: CasperN
 																OpenGameArt.org: C.Nilsson
 																LPC C.Nilsson (2D art)
-															 
 															- Daniel Eddeland 
-
 															- Johann CHARLOT 
 																Homepage  http://poufpoufproduction.fr
 																Email     johannc@poufpoufproduction.fr
-
 															- Skyler Robert Colladay 
-
  															- FeralFantom's Entry (2D art)
 
 															BASE assets:
 															------------
 
-															Lanea Zimmerman (AKA Sharm)
-															~~~~~~~~~~~~~~~~~~~~~~~~~~~
+															- Lanea Zimmerman (AKA Sharm)
+															- Stephen Challener (AKA Redshrike)
+															- Charles Sanchez (AKA CharlesGabriel)
+															- Manuel Riecke (AKA MrBeast)
+															- Daniel Armstrong (AKA HughSpectrum)
 
-															 - barrel.png
-															 - brackish.png
-															 - buckets.png
-															 - bridges.png
-															 - cabinets.png
-															 - cement.png
-															 - cementstair.png
-															 - chests.png
-															 - country.png
-															 - cup.png
-															 - dirt2.png
-															 - dirt.png
-															 - dungeon.png
-															 - grassalt.png
-															 - grass.png
-															 - holek.png
-															 - holemid.png
-															 - hole.png
-															 - house.png
-															 - inside.png
-															 - kitchen.png
-															 - lava.png
-															 - lavarock.png
-															 - mountains.png
-															 - rock.png
-															 - shadow.png
-															 - signs.png
-															 - stairs.png
-															 - treetop.png
-															 - trunk.png
-															 - waterfall.png
-															 - watergrass.png
-															 - water.png
-															 - princess.png and princess.xcf
-
-
-															Stephen Challener (AKA Redshrike)
-															~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-															 - female_walkcycle.png
-															 - female_hurt.png
-															 - female_slash.png
-															 - female_spellcast.png
-															 - male_walkcycle.png
-															 - male_hurt.png
-															 - male_slash.png
-															 - male_spellcast.png
-															 - male_pants.png
-															 - male_hurt_pants.png
-															 - male_fall_down_pants.png
-															 - male_slash_pants.png
-
-
-															Charles Sanchez (AKA CharlesGabriel)
-															~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-															 - bat.png
-															 - bee.png
-															 - big_worm.png
-															 - eyeball.png
-															 - ghost.png
-															 - man_eater_flower.png
-															 - pumpking.png
-															 - slime.png
-															 - small_worm.png
-															 - snake.png
-
-
-															Manuel Riecke (AKA MrBeast)
-															~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-															 - hairfemale.png and hairfemale.xcf
-															 - hairmale.png and hairmale.xcf
-															 - soldier.png
-															 - soldier_altcolor.png
-
-
-															Daniel Armstrong (AKA HughSpectrum)
-															~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-															Castle work:
-
-															 - castlewalls.png
-															 - castlefloors.png
-															 - castle_outside.png
-															 - castlefloors_outside.png
-															 - castle_lightsources.png
+Shop interior tiles: http://opengameart.org/content/lpc-house-interior-and-decorations
+															- Lanea Zimmerman (AKA Sharm)
+															- Tuomo Untinen
+															- Daniel Eddeland (http://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements)
+															- Cutboard is made by Hyptosis
+															- Manuel Riecke (AKA MrBeast)
+															- Contributor William Thompson
+															- Armors by: Adapted by Matthew Krohn from art created by Johannes Sjölund
+															- Curt
 
 Tiled - http://www.mapeditor.org/ - Thorbjørn Lindeijer
 Tiled was used to create the map, using the above art.
+
+Menu font text - http://www.fontspace.com/

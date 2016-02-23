@@ -49,6 +49,7 @@ southLeftImg = pygame.image.load('southfacingleft.png')
 southRightImg = pygame.image.load('southfacingright.png')
 
 mapImg = pygame.image.load('mainmap.png')
+shopImg = pygame.image.load('shopinterior.png')
 startImg = pygame.image.load('startmenu.png')
 
 class Level:
@@ -235,8 +236,7 @@ class Player(pygame.sprite.Sprite):
                         gameDisplay.blit(mapImg, (0,-360))
                     elif self.sector == "bottomright":
                         gameDisplay.blit(mapImg, (-800,-360))
-
-                        gameDisplay.blit(mapImg, (-800,-360))                    
+         
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(20)
