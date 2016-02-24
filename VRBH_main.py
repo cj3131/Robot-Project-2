@@ -9,8 +9,8 @@ halfWidth = 400
 halfHeight = 300
 quadOne = (0,0)
 quadTwo = (-800,0)
-quadThree = (0,-360)
-quadFour = (-800,-360)
+quadThree = (0,-352)
+quadFour = (-800,-352)
 
 #colour definition
 black = (0,0,0)
@@ -49,7 +49,7 @@ southLeftImg = pygame.image.load('southfacingleft.png')
 southRightImg = pygame.image.load('southfacingright.png')
 
 mapImg = pygame.image.load('mainmap.png')
-shopImg = pygame.image.load('shopinterior.png')
+shopImg = pygame.image.load('shopinteriorone.png')
 startImg = pygame.image.load('startmenu.png')
 
 class Level:
@@ -130,9 +130,9 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "topright"
                 self.rect.x = -31
                 self.collided = False
-            elif (self.rect.y +yChange) > 569:
+            elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomleft"
-                self.rect.y = 209
+                self.rect.y = 225
                 self.collided = False
             else:
                 self.collided = False
@@ -146,7 +146,7 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "topleft"
                 self.rect.x = 801
                 self.collided = False
-            elif (self.rect.y + yChange) > 569:
+            elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomright"
                 self.rect.y = 1
                 self.collided = False
@@ -154,17 +154,20 @@ class Player(pygame.sprite.Sprite):
                 self.collided = False
 
         elif self.sector == "bottomleft":
-            if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) > 473:
+            if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
-                self.quadrant = (0,-360)
+                self.quadrant = (0,-352)
+            elif self.rect.x == 161 or self.rect.x == 193:
+                if 417 < self.rect.y + yChange < 449:
+                    shopInterior(imgOne)
             elif (self.rect.x + xChange) > 768:
                 self.sector = "bottomright"
                 self.rect.x = 1
                 self.collided = False
             elif (self.rect.y + yChange) < 1:
                 self.sector = "topleft"
-                self.rect.y = 331
+                self.rect.y = 353
                 self.collided = False
             else:
                 self.collided = False
@@ -173,7 +176,7 @@ class Player(pygame.sprite.Sprite):
             if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 473:
                 print("collided")
                 self.collided = True
-                self.quadrant = (-800,-360)
+                self.quadrant = (-800,-352)
             elif (self.rect.x + xChange) < 1:
                 self.sector = "bottomleft"
                 self.rect.x = 801
@@ -209,9 +212,9 @@ class Player(pygame.sprite.Sprite):
                     elif self.sector == "topright":
                         gameDisplay.blit(mapImg, (-800,0))
                     elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-360))
+                        gameDisplay.blit(mapImg, (0,-352))
                     elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
+                        gameDisplay.blit(mapImg, (-800,-352))
                         
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
@@ -233,9 +236,9 @@ class Player(pygame.sprite.Sprite):
                     elif self.sector == "topright":
                         gameDisplay.blit(mapImg, (-800,0))
                     elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-360))
+                        gameDisplay.blit(mapImg, (0,-352))
                     elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
+                        gameDisplay.blit(mapImg, (-800,-352))
          
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
@@ -256,9 +259,9 @@ class Player(pygame.sprite.Sprite):
                     elif self.sector == "topright":
                         gameDisplay.blit(mapImg, (-800,0))
                     elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-360))
+                        gameDisplay.blit(mapImg, (0,-352))
                     elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
+                        gameDisplay.blit(mapImg, (-800,-352))
                         
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
@@ -279,15 +282,26 @@ class Player(pygame.sprite.Sprite):
                     elif self.sector == "topright":
                         gameDisplay.blit(mapImg, (-800,0))
                     elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-360))
+                        gameDisplay.blit(mapImg, (0,-352))
                     elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-360))
+                        gameDisplay.blit(mapImg, (-800,-352))
                         
                     spriteGroup.draw(gameDisplay)
                     pygame.display.update()
                     pygame.time.delay(20)
-                    t += 1                
+                    t += 1
+            print(self.rect)                
 
+def shopInterior(player):
+    inside = True
+    while inside == True:
+        #pc.image = player
+        pc.rect.x = 320
+        pc.rect.y = 544
+        gameDisplay.fill(white)
+        gameDisplay.blit(shopImg,(0,0))
+        spriteGroup.draw(gameDisplay)
+        pygame.display.update()
         
 def button(x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
