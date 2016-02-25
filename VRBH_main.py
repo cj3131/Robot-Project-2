@@ -30,29 +30,36 @@ clock = pygame.time.Clock()
 fps = 60
 
 spriteGroup = pygame.sprite.Group()
+coinGroup = pygame.sprite.Group()
+currentCoinGroup = pygame.sprite.Group()
+currentSpriteGroup = pygame.sprite.Group()
+
+
+#f = open("E:\\Python scripts\\mainVRBH\\images\\mainmap.png")
 
 #Load player character, map, menu, and other interface images
-eastImg = pygame.image.load('eastfacing.png')
-eastLeftImg = pygame.image.load('eastfacingleft.png')
-eastRightImg = pygame.image.load('eastfacingright.png')
+eastImg = pygame.image.load('images/eastfacing.png')
+eastLeftImg = pygame.image.load('images/eastfacingleft.png')
+eastRightImg = pygame.image.load('images/eastfacingright.png')
 
-westImg = pygame.image.load('westfacing.png')
-westLeftImg = pygame.image.load('westfacingleft.png')
-westRightImg = pygame.image.load('westfacingright.png')
+westImg = pygame.image.load('images/westfacing.png')
+westLeftImg = pygame.image.load('images/westfacingleft.png')
+westRightImg = pygame.image.load('images/westfacingright.png')
 
-northImg = pygame.image.load('northfacing.png')
-northLeftImg = pygame.image.load('northfacingleft.png')
-northRightImg = pygame.image.load('northfacingright.png')
+northImg = pygame.image.load('images/northfacing.png')
+northLeftImg = pygame.image.load('images/northfacingleft.png')
+northRightImg = pygame.image.load('images/northfacingright.png')
 
-southImg = pygame.image.load('southfacing.png')
-southLeftImg = pygame.image.load('southfacingleft.png')
-southRightImg = pygame.image.load('southfacingright.png')
+southImg = pygame.image.load('images/southfacing.png')
+southLeftImg = pygame.image.load('images/southfacingleft.png')
+southRightImg = pygame.image.load('images/southfacingright.png')
 
-mapImg = pygame.image.load('mainmap.png')
-shopImg = pygame.image.load('shopinteriorone.png')
-startImg = pygame.image.load('startmenu.png')
-scrollImg = pygame.image.load('scrollhorizontal.png')
-coinImg = pygame.image.load('coinone.png')
+#mapImg = pygame.image.load('mainmap.png')
+mapImg = pygame.image.load("images/mainmap.png")
+shopImg = pygame.image.load('images/shopinteriorone.png')
+startImg = pygame.image.load('images/startmenu.png')
+scrollImg = pygame.image.load('images/scrollhorizontal.png')
+coinImg = pygame.image.load('images/coinone.png')
 
 #Not currently used
 class Level:
@@ -87,6 +94,21 @@ class NPC(pygame.sprite.Sprite):
         self.xchange = 0
         self.ychange = 0
 
+class Coin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((32,32))
+        self.rect = self.image.get_rect()
+
+    def setImage(self, filename):
+        self.image = pygame.image.load(filename)
+        self.rect = self.image.get_rect()
+
+    def setPosition(self,x,y):
+        self.rect.x = x
+        self.rect.y = y
+        
+
 #Deals with the player character's movement, and changing of map quadrants
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -101,6 +123,7 @@ class Player(pygame.sprite.Sprite):
         self.collided = False
         self.quadrant = (0,0)
         self.coins = 0
+        self.collected = []
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -146,6 +169,7 @@ class Player(pygame.sprite.Sprite):
                 print("collided")
                 self.collided = True
                 self.quadrant = (0,0)
+                
 
             elif (self.rect.x + xChange) > 769:
                 self.sector = "topright"
@@ -155,6 +179,11 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "bottomleft"
                 self.rect.y = 225
                 self.collided = False
+            elif (self.rect.x > 350) and (self.rect.y > 350):
+                #check that coin is not in collected. if it is, pass. if it isn't,
+                #add it to collected and currentSpriteGroup.  increase self.coins
+                self.collected.append(c1)
+                print(self.collected)
             else:
                 self.collided = False
                 
@@ -228,25 +257,25 @@ class Player(pygame.sprite.Sprite):
 
                 for i in range(4):
                     self.image = imgTwo
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range(4):
                     self.image = imgOne
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range(4):
                     self.image = imgThree
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range (4):
                     self.image = imgOne
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
             xChange = 0
@@ -254,23 +283,24 @@ class Player(pygame.sprite.Sprite):
             print(self.rect)
 
 #This function should be called every time something happens, i.e when the character moves.
-def update(posx, posy, xChange, yChange, spriteGroup, sect, img):
+def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGroup):
     posx += xChange
     posy += yChange
     gameDisplay.fill(white)
+    #currentspriteGroup needs pc added
+    currentSpriteGroup.add(pc,c1,c2,c3)
 
     if sect == "topleft":
-        gameDisplay.blit(img, (0,0))
-        #Display coins in top left sector
+        gameDisplay.blit(img, (0,0))        
     elif sect == "topright":
         gameDisplay.blit(img, (-800,0))
-        #Display coins in topright sector...
     elif sect == "bottomleft":
         gameDisplay.blit(img, (0,-352))
     elif sect == "bottomright":
         gameDisplay.blit(img, (-800,-352))
 
-    spriteGroup.draw(gameDisplay)
+    #spriteGroup.draw(gameDisplay)
+    currentSpriteGroup.draw(gameDisplay)
     pygame.display.update()
 
     return posx, posy
@@ -348,18 +378,30 @@ def gameIntro():
 def gameLoop():
     #background = Level()
     gameDisplay.fill(white)
-
-    pc.setImage("southfacing.png")
+    
+    pc.setImage("images/southfacing.png")
     pc.setPosition(193,97)
     spriteGroup.add(pc)
-    spriteGroup.draw(gameDisplay)
+
+
+    
+    
+    for i in currentCoinGroup:
+        i.setImage("images/coinone.png")
+
+    for i in currentCoinGroup:
+        i.setPosition(350, 350)
     
     facing = southImg
     moving = None
     x = (displayWidth * 0.45)
     y = (displayHeight * 0.8)
     gameDisplay.blit(mapImg,(0,0))
+##    gameDisplay.blit(coinImg, (385, 97))
+##    gameDisplay.blit(coinImg, (673, 97))
+##    gameDisplay.blit(coinImg, (545, 289))
     spriteGroup.draw(gameDisplay)
+    currentCoinGroup.draw(gameDisplay)
     pygame.display.update()
     run = True
     while run:
@@ -396,7 +438,9 @@ def gameLoop():
         clock.tick(fps)
         
 pc = Player()
+c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin()
+coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
+currentCoinGroup.add(c1,c2,c3)
 gameIntro()
-#gameLoop()
 pygame.quit()
 quit()
