@@ -104,7 +104,13 @@ class Coin(pygame.sprite.Sprite):
     def setPosition(self,x,y):
         self.rect.x = x
         self.rect.y = y
-        
+###     
+#Pathfinding
+if pygame.mouse.get_pressed()[0]:
+    mouse_x,mouse_y = pygame.mouse.get_pos()
+    if selected:
+        unit.getRoute((mouse_x/800,mouse_y/600))
+###
 
 #Deals with the player character's movement, and changing of map quadrants
 class Player(pygame.sprite.Sprite):
@@ -278,6 +284,44 @@ class Player(pygame.sprite.Sprite):
             xChange = 0
             yChange = 0
             print(self.rect)
+###            
+#pathfinding code
+def getRoute(self,target):
+    self.route = path((self.x/800,self.y/600), target)
+
+def getNode(self):
+    if self.route:
+        self.node = route.pop(0)
+        difference_x,difference_y = self.node[0] - self.x, self.node[1] - self.y
+        if difference_x > 0:
+            self.vector_x = self.speed
+        if difference_x < 0:
+            self.vector_x = self.speed * -1
+        else:
+            self.vector_x = 0
+        if difference_y > 0:
+            self.vector_y = self.speed
+        if difference_x < 0:
+            self.vector_y = self.speed * -1
+        else:
+            self.vector_y = 0
+    else:
+        self.node = None
+        self.vector_x = 0
+        self.vector_y = 0
+
+def update(self):
+
+    if self.route or self.node:
+        if self.route and not self.node:
+            self.getNode()
+        if (self.x,self.y) == self.node:
+            self.getNode()
+
+    self.x += self.vector_x
+    self.y += self.vector_y
+    self.rect.topleft = (self.x,self.y)
+###
 
 #This function should be called every time something happens, i.e when the character moves.
 def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGroup):
