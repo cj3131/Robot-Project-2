@@ -31,7 +31,7 @@ fps = 60
 
 spriteGroup = pygame.sprite.Group()
 
-#Load player character, map, and menu images
+#Load player character, map, menu, and other interface images
 eastImg = pygame.image.load('eastfacing.png')
 eastLeftImg = pygame.image.load('eastfacingleft.png')
 eastRightImg = pygame.image.load('eastfacingright.png')
@@ -51,7 +51,10 @@ southRightImg = pygame.image.load('southfacingright.png')
 mapImg = pygame.image.load('mainmap.png')
 shopImg = pygame.image.load('shopinteriorone.png')
 startImg = pygame.image.load('startmenu.png')
+scrollImg = pygame.image.load('scrollhorizontal.png')
+coinImg = pygame.image.load('coinone.png')
 
+#Not currently used
 class Level:
     
     def __init__(self):
@@ -67,12 +70,29 @@ class Level:
         self.worldShiftx += shiftx
         self.rect.x += shiftx
         gameDisplay.blit(mapImg,(self.rect.x,0))
-    
+
+#Not currently used
+class Shop(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((800,600))
+        self.rect = self.image.get_rect()
+
+#Will probably need to be used to move the NPC character in shops around.
+class NPC(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((32, 32))
+        self.rect = self.image.get_rect()
+        self.xchange = 0
+        self.ychange = 0
+
+#Deals with the player character's movement, and changing of map quadrants
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((32, 32))
-        self.image.fill(blue)
+        #self.image.fill(blue)
         self.rect = self.image.get_rect()
         self.xchange = 0
         self.ychange = 0
@@ -80,6 +100,7 @@ class Player(pygame.sprite.Sprite):
         self.sector = "topleft"
         self.collided = False
         self.quadrant = (0,0)
+        self.coins = 0
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -94,8 +115,6 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, direction):
         t = 0
-        xtemp = 0
-        ytemp = 0
         if direction == "west":
             imgOne = westImg
             imgTwo = westLeftImg
@@ -121,11 +140,13 @@ class Player(pygame.sprite.Sprite):
             xChange = 0
             yChange = -1
             
+
         if self.sector == "topleft":
             if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
                 self.quadrant = (0,0)
+
             elif (self.rect.x + xChange) > 769:
                 self.sector = "topright"
                 self.rect.x = -31
@@ -142,6 +163,7 @@ class Player(pygame.sprite.Sprite):
                 print("collided")
                 self.collided = True
                 self.quadrant = (-800,0)
+
             elif (self.rect.x + xChange) < 1:
                 self.sector = "topleft"
                 self.rect.x = 801
@@ -158,9 +180,14 @@ class Player(pygame.sprite.Sprite):
                 print("collided")
                 self.collided = True
                 self.quadrant = (0,-352)
+
             elif self.rect.x == 161 or self.rect.x == 193:
                 if 417 < self.rect.y + yChange < 449:
-                    shopInterior(imgOne)
+                    #Needs copying to other sectors
+                    shopInterior(imgOne,shopImg)
+                    self.rect.x, self.rect.y = 161, 449
+                    yChange = 1
+
             elif (self.rect.x + xChange) > 768:
                 self.sector = "bottomright"
                 self.rect.x = 1
@@ -177,6 +204,7 @@ class Player(pygame.sprite.Sprite):
                 print("collided")
                 self.collided = True
                 self.quadrant = (-800,-352)
+
             elif (self.rect.x + xChange) < 1:
                 self.sector = "bottomleft"
                 self.rect.x = 801
@@ -188,121 +216,100 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.collided = False
 
+
         if self.collided == True:
             self.image = imgOne
             gameDisplay.fill(white)
             gameDisplay.blit(mapImg,(self.quadrant))
             spriteGroup.draw(gameDisplay)
             pygame.display.update()
-
         else:
             while t < 31:
-                for i in range(4):
-                    self.rect.x += xChange
-                    self.rect.y += yChange
-                    xtemp = self.rect.x
-                    ytemp = self.rect.y
-                    self.image = imgTwo
-                    self.rect.x = xtemp
-                    self.rect.y = ytemp
-                    gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
-                        gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
-                        gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-352))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-352))
-                        
-                    spriteGroup.draw(gameDisplay)
-                    pygame.display.update()
-                    pygame.time.delay(20)
-                    t += 1
-                #self.playSound()
-                for i in range(4):
-                    self.rect.x += xChange
-                    self.rect.y += yChange
-                    xtemp = self.rect.x
-                    ytemp = self.rect.y
-                    self.image = imgOne
-                    self.rect.x = xtemp
-                    self.rect.y = ytemp
-                    gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
-                        gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
-                        gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-352))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-352))
-         
-                    spriteGroup.draw(gameDisplay)
-                    pygame.display.update()
-                    pygame.time.delay(20)
-                    t += 1
-                for i in range(4):
-                    self.rect.x += xChange
-                    self.rect.y += yChange
-                    xtemp = self.rect.x
-                    ytemp = self.rect.y
-                    self.image = imgThree
-                    self.rect.x = xtemp
-                    self.rect.y = ytemp
-                    gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
-                        gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
-                        gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-352))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-352))
-                        
-                    spriteGroup.draw(gameDisplay)
-                    pygame.display.update()
-                    pygame.time.delay(20)
-                    t += 1
-                for i in range (4):
-                    self.rect.x += xChange
-                    self.rect.y += yChange
-                    xtemp = self.rect.x
-                    ytemp = self.rect.y
-                    self.image = imgOne
-                    self.rect.x = xtemp
-                    self.rect.y = ytemp
-                    gameDisplay.fill(white)
-                    
-                    if self.sector == "topleft":
-                        gameDisplay.blit(mapImg, (0,0))
-                    elif self.sector == "topright":
-                        gameDisplay.blit(mapImg, (-800,0))
-                    elif self.sector == "bottomleft":
-                        gameDisplay.blit(mapImg, (0,-352))
-                    elif self.sector == "bottomright":
-                        gameDisplay.blit(mapImg, (-800,-352))
-                        
-                    spriteGroup.draw(gameDisplay)
-                    pygame.display.update()
-                    pygame.time.delay(20)
-                    t += 1
-            print(self.rect)                
 
-def shopInterior(player):
+                for i in range(4):
+                    self.image = imgTwo
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    pygame.time.delay(5)
+                    t += 1
+
+                for i in range(4):
+                    self.image = imgOne
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    pygame.time.delay(5)
+                    t += 1
+
+                for i in range(4):
+                    self.image = imgThree
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    pygame.time.delay(5)
+                    t += 1
+
+                for i in range (4):
+                    self.image = imgOne
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg)
+                    pygame.time.delay(5)
+                    t += 1
+            xChange = 0
+            yChange = 0
+            print(self.rect)
+
+#This function should be called every time something happens, i.e when the character moves.
+def update(posx, posy, xChange, yChange, spriteGroup, sect, img):
+    posx += xChange
+    posy += yChange
+    gameDisplay.fill(white)
+
+    if sect == "topleft":
+        gameDisplay.blit(img, (0,0))
+        #Display coins in top left sector
+    elif sect == "topright":
+        gameDisplay.blit(img, (-800,0))
+        #Display coins in topright sector...
+    elif sect == "bottomleft":
+        gameDisplay.blit(img, (0,-352))
+    elif sect == "bottomright":
+        gameDisplay.blit(img, (-800,-352))
+
+    spriteGroup.draw(gameDisplay)
+    pygame.display.update()
+
+    return posx, posy
+
+#This function should run when entering a shop. 
+def shopInterior(player, shopBackground):
     inside = True
+    pc.rect.x = 416
+    pc.rect.y = 544
+    gameDisplay.fill(white)
+    gameDisplay.blit(shopBackground, (0,0))
+    gameDisplay.blit(scrollImg, (80,0))
+    spriteGroup.draw(gameDisplay)
+    writeText("Hello. How long do you", "freesansbold.ttf", 36, 160,80)
+    writeText("want me to search for?", "freesansbold.ttf", 36, 160,110)
+    writeText("1 minute", "freesansbold.ttf", 24, 160, 300)
+    writeText("2 minutes", "freesansbold.ttf", 24, 270, 300)
+    writeText("3 minutes", "freesansbold.ttf", 24, 380, 300)
+    writeText("Exit", "freesansbold.ttf", 24, 500, 300)
+    writeText("(costs 1 coin)", "freesansbold.ttf", 24, 160, 340)
+    writeText("(costs 2 coins)", "freesansbold.ttf", 24, 270, 340)
+    writeText("(costs 3 coins)", "freesansbold.ttf", 24, 380, 340)
+    pygame.display.update()
+
+    #Here we check the user's option choice
     while inside == True:
-        #pc.image = player
-        pc.rect.x = 320
-        pc.rect.y = 544
-        gameDisplay.fill(white)
-        gameDisplay.blit(shopImg,(0,0))
-        spriteGroup.draw(gameDisplay)
-        pygame.display.update()
-        
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        print(mouse)
+        pygame.time.delay(20)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if click[0] == 1:
+                if 100 <= mouse[0] <= 250 and 500 <= mouse[1] <= 600:
+                    print("START PATHFINDING STUFF HERE. ABOVE BUTTON CO-ORDINATES NEED TO BE CHANGED")
+
+#If the user clicks within the given co-ords, the passed function will run
 def button(x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -314,13 +321,15 @@ def quitGame():
     pygame.quit()
     quit()
 
+#Guess what this does
 def writeText(text,fontType,fontSize,x,y):
     font = pygame.font.Font(fontType, fontSize)
     text = font.render(text, 1, (10,10,10))
     textRect = text.get_rect()
-    textRect.center = (x,y)
+    textRect = (x,y)
     gameDisplay.blit(text, textRect)
 
+#Main menu function
 def gameIntro():
     intro = True
     while intro:
@@ -335,11 +344,11 @@ def gameIntro():
             pygame.display.update()
             clock.tick(15)
 
-        
+
 def gameLoop():
     #background = Level()
     gameDisplay.fill(white)
-    pc = Player()
+
     pc.setImage("southfacing.png")
     pc.setPosition(193,97)
     spriteGroup.add(pc)
@@ -350,6 +359,8 @@ def gameLoop():
     x = (displayWidth * 0.45)
     y = (displayHeight * 0.8)
     gameDisplay.blit(mapImg,(0,0))
+    spriteGroup.draw(gameDisplay)
+    pygame.display.update()
     run = True
     while run:
         for event in pygame.event.get():
@@ -378,12 +389,13 @@ def gameLoop():
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     moving = None
 
-        if moving == None:
-            spriteGroup.draw(gameDisplay)
-            pygame.display.update()
+        # if moving == None:
+        #     spriteGroup.draw(gameDisplay)
+        #     pygame.display.update()
 
         clock.tick(fps)
         
+pc = Player()
 gameIntro()
 #gameLoop()
 pygame.quit()
