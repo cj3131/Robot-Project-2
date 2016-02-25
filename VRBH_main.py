@@ -33,12 +33,6 @@ spriteGroup = pygame.sprite.Group()
 coinGroup = pygame.sprite.Group()
 currentCoinGroup = pygame.sprite.Group()
 currentSpriteGroup = pygame.sprite.Group()
-<<<<<<< HEAD
-
-
-#f = open("E:\\Python scripts\\mainVRBH\\images\\mainmap.png")
-=======
->>>>>>> origin/master
 
 #Load player character, map, menu, and other interface images
 eastImg = pygame.image.load('images/eastfacing.png')
@@ -290,10 +284,7 @@ def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGr
     posx += xChange
     posy += yChange
     gameDisplay.fill(white)
-<<<<<<< HEAD
     #currentspriteGroup needs pc added
-=======
->>>>>>> origin/master
     currentSpriteGroup.add(pc,c1,c2,c3)
 
     if sect == "topleft":
@@ -384,24 +375,14 @@ def gameIntro():
 def gameLoop():
     #background = Level()
     gameDisplay.fill(white)
-    
-<<<<<<< HEAD
     pc.setImage("images/southfacing.png")
-=======
     pc.setImage("southfacing.png")
->>>>>>> origin/master
     pc.setPosition(193,97)
     spriteGroup.add(pc)
-
-
-    
     
     for i in currentCoinGroup:
-<<<<<<< HEAD
         i.setImage("images/coinone.png")
-=======
         i.setImage("coinone.png")
->>>>>>> origin/master
 
     for i in currentCoinGroup:
         i.setPosition(350, 350)
