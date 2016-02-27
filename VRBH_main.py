@@ -34,7 +34,7 @@ coinGroup = pygame.sprite.Group()
 currentCoinGroup = pygame.sprite.Group()
 currentSpriteGroup = pygame.sprite.Group()
 
-#Load player character, map, menu, and other interface images
+#Load player character, NPC, map, menu, and other interface images
 eastImg = pygame.image.load('images/eastfacing.png')
 eastLeftImg = pygame.image.load('images/eastfacingleft.png')
 eastRightImg = pygame.image.load('images/eastfacingright.png')
@@ -51,7 +51,24 @@ southImg = pygame.image.load('images/southfacing.png')
 southLeftImg = pygame.image.load('images/southfacingleft.png')
 southRightImg = pygame.image.load('images/southfacingright.png')
 
-#mapImg = pygame.image.load('mainmap.png')
+
+shopkeepEastImg = pygame.image.load('images/shopkeepeastfacing.png') 
+shopkeepEastLeftImg = pygame.image.load('images/shopkeepeastfacingleft.png') 
+shopkeepEastRightImg = pygame.image.load('images/shopkeepeastfacingright.png') 
+
+shopkeepWestImg = pygame.image.load('images/shopkeepwestfacing.png')
+shopkeepWestLeftImg = pygame.image.load('images/shopkeepwestfacingleft.png') 
+shopkeepWestRightImg = pygame.image.load('images/shopkeepwestfacingright.png') 
+
+shopkeepNorthImg = pygame.image.load('images/shopkeepnorthfacing.png') 
+shopkeepNorthLeftImg = pygame.image.load('images/shopkeepnorthfacingleft.png') 
+shopkeepNorthRightImg = pygame.image.load('images/shopkeepnorthfacingright.png') 
+
+shopkeepSouthImg = pygame.image.load('images/shopkeepsouthfacing.png') 
+shopkeepSouthLeftImg = pygame.image.load('images/shopkeepsouthfacingleft.png') 
+shopkeepSouthRightImg = pygame.image.load('images/shopkeepsouthfacingright.png') 
+
+
 mapImg = pygame.image.load("images/mainmap.png")
 shopImg = pygame.image.load('images/shopinteriorone.png')
 startImg = pygame.image.load('images/startmenu.png')
@@ -59,28 +76,28 @@ scrollImg = pygame.image.load('images/scrollhorizontal.png')
 coinImg = pygame.image.load('images/coinone.png')
 
 #Not currently used
-class Level:
+# class Level:
     
-    def __init__(self):
+#     def __init__(self):
 
-        self.image = pygame.Surface((1600,960))
-        self.rect = self.image.get_rect()
-        self.worldShiftx = 0
-        self.leftViewbox = halfWidth - displayWidth/8
-        self.rightViewbox = halfWidth + displayWidth/8
+#         self.image = pygame.Surface((1600,960))
+#         self.rect = self.image.get_rect()
+#         self.worldShiftx = 0
+#         self.leftViewbox = halfWidth - displayWidth/8
+#         self.rightViewbox = halfWidth + displayWidth/8
 
-    def shiftWorld(self, shiftx):
+#     def shiftWorld(self, shiftx):
 
-        self.worldShiftx += shiftx
-        self.rect.x += shiftx
-        gameDisplay.blit(mapImg,(self.rect.x,0))
+#         self.worldShiftx += shiftx
+#         self.rect.x += shiftx
+#         gameDisplay.blit(mapImg,(self.rect.x,0))
 
-#Not currently used
-class Shop(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((800,600))
-        self.rect = self.image.get_rect()
+# #Not currently used
+# class Shop(pygame.sprite.Sprite):
+#     def __init__(self):
+#         super().__init__()
+#         self.image = pygame.Surface((800,600))
+#         self.rect = self.image.get_rect()
 
 #Will probably need to be used to move the NPC character in shops around.
 class NPC(pygame.sprite.Sprite):
@@ -91,6 +108,16 @@ class NPC(pygame.sprite.Sprite):
         self.xchange = 0
         self.ychange = 0
 
+    def setPosition(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+
+    def setImage(self,filename):
+        self.image = pygame.image.load(filename)
+        self.rect = self.image.get_rect()
+
+
+#A sprite to be used in detecting when the player character picks up a coin. (Not implemented yet)
 class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -111,7 +138,6 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((32, 32))
-        #self.image.fill(blue)
         self.rect = self.image.get_rect()
         self.xchange = 0
         self.ychange = 0
@@ -176,9 +202,11 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "bottomleft"
                 self.rect.y = 225
                 self.collided = False
-            elif (self.rect.x > 350) and (self.rect.y > 350):
+            elif (self.rect.x == 545) and (self.rect.y == 289):
                 #check that coin is not in collected. if it is, pass. if it isn't,
-                #add it to collected and currentSpriteGroup.  increase self.coins
+                #add it to collected and currentSpriteGroup.  increase self.coins. 
+                #not yet implemented
+                print("you got a coin")
                 self.collected.append(c1)
                 print(self.collected)
             else:
@@ -314,11 +342,15 @@ def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGr
 def shopInterior(player, shopBackground):
     inside = True
     result = False
-    pc.rect.x = 416
-    pc.rect.y = 544
+    pc.rect.x = 417
+    pc.rect.y = 545
     gameDisplay.fill(white)
     gameDisplay.blit(shopBackground, (0,0))
     gameDisplay.blit(scrollImg, (80,0))
+    shopkeeper = NPC()
+    shopkeeper.setImage("images/shopkeepsouthfacing.png")
+    shopkeeper.setPosition(416, 481)
+    spriteGroup.add(shopkeeper)
     spriteGroup.draw(gameDisplay)
     writeText("Hello. How long do you", "freesansbold.ttf", 36, 160,80)
     writeText("want me to search for?", "freesansbold.ttf", 36, 160,120)
@@ -351,10 +383,8 @@ def shopInterior(player, shopBackground):
             result = button(565, 300, 110, 25, result)
             if result == True:
                 print("Exit")
+                shopkeeper.remove(spriteGroup)
                 return
-            # if click[0] == 1:
-            #      if 100 <= mouse[0] <= 250 and 500 <= mouse[1] <= 600:
-            #         print("START PATHFINDING STUFF HERE. ABOVE BUTTON CO-ORDINATES NEED TO BE CHANGED")
 
 #If the user clicks within the given co-ords, the passed function will run
 def button(x,y,w,h,chosen):
@@ -404,13 +434,13 @@ def gameLoop():
     #background = Level()
     gameDisplay.fill(white)
     pc.setImage("images/southfacing.png")
-    pc.setPosition(193,97)
+    pc.setPosition(193, 97)
     spriteGroup.add(pc)
     for i in currentCoinGroup:
         i.setImage("images/coinone.png")
 
-    for i in currentCoinGroup:
-        i.setPosition(350, 350)
+    # for i in currentCoinGroup:
+    #     i.setPosition(350, 350)
     
     facing = southImg
     moving = None
@@ -421,6 +451,9 @@ def gameLoop():
 ##    gameDisplay.blit(coinImg, (673, 97))
 ##    gameDisplay.blit(coinImg, (545, 289))
     spriteGroup.draw(gameDisplay)
+    c1.setPosition(545, 289)
+    c2.setPosition(673, 97)
+    c3.setPosition(385, 97)
     currentCoinGroup.draw(gameDisplay)
     pygame.display.update()
     run = True
