@@ -185,10 +185,15 @@ class Player(pygame.sprite.Sprite):
                 self.collided = False
                 
         elif self.sector == "topright":
-            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 97:
+            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
                 self.quadrant = (-800,0)
+
+            elif ( (self.rect.x == 609) and (193 < self.rect.y + yChange < 225) ) or ( (self.rect.x == 641) and (193 < self.rect.y + yChange < 225) ):
+                shopInterior(imgOne,shopImg)
+                self.rect.x, self.rect.y = 641,193
+                yChange = 1
 
             elif (self.rect.x + xChange) < 1:
                 self.sector = "topleft"
@@ -196,7 +201,7 @@ class Player(pygame.sprite.Sprite):
                 self.collided = False
             elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomright"
-                self.rect.y = 1
+                self.rect.y = 225
                 self.collided = False
             else:
                 self.collided = False
@@ -207,16 +212,14 @@ class Player(pygame.sprite.Sprite):
                 self.collided = True
                 self.quadrant = (0,-352)
 
-            elif self.rect.x == 161 or self.rect.x == 193:
-                if 417 < self.rect.y + yChange < 449:
-                    #Needs copying to other sectors
-                    shopInterior(imgOne,shopImg)
-                    self.rect.x, self.rect.y = 161, 449
-                    yChange = 1
+            elif ( (self.rect.x == 161) and (417 < self.rect.y + yChange < 449) ) or ( (self.rect.x == 193) and (417 < self.rect.y + yChange < 449) ):
+                shopInterior(imgOne,shopImg)
+                self.rect.x, self.rect.y = 161, 449
+                yChange = 1
 
             elif (self.rect.x + xChange) > 768:
                 self.sector = "bottomright"
-                self.rect.x = 1
+                self.rect.x = -31
                 self.collided = False
             elif (self.rect.y + yChange) < 1:
                 self.sector = "topleft"
@@ -226,10 +229,15 @@ class Player(pygame.sprite.Sprite):
                 self.collided = False
 
         elif self.sector == "bottomright":
-            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 473:
+            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
                 self.quadrant = (-800,-352)
+
+            elif ((self.rect.x == 545) and (417 < self.rect.y + yChange < 449)) or ((self.rect.x == 577) and (417 < self.rect.y + yChange < 449)):
+                shopInterior(imgOne,shopImg)
+                self.rect.x, self.rect.y = 577,449
+                yChange = 1
 
             elif (self.rect.x + xChange) < 1:
                 self.sector = "bottomleft"
@@ -237,7 +245,7 @@ class Player(pygame.sprite.Sprite):
                 self.collided = False
             elif (self.rect.y + yChange) < 1:
                 self.sector = "topright"
-                self.rect.y = 369
+                self.rect.y = 353
                 self.collided = False
             else:
                 self.collided = False
@@ -305,6 +313,7 @@ def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGr
 #This function should run when entering a shop. 
 def shopInterior(player, shopBackground):
     inside = True
+    result = False
     pc.rect.x = 416
     pc.rect.y = 544
     gameDisplay.fill(white)
@@ -312,37 +321,50 @@ def shopInterior(player, shopBackground):
     gameDisplay.blit(scrollImg, (80,0))
     spriteGroup.draw(gameDisplay)
     writeText("Hello. How long do you", "freesansbold.ttf", 36, 160,80)
-    writeText("want me to search for?", "freesansbold.ttf", 36, 160,110)
+    writeText("want me to search for?", "freesansbold.ttf", 36, 160,120)
     writeText("1 minute", "freesansbold.ttf", 24, 160, 300)
-    writeText("2 minutes", "freesansbold.ttf", 24, 270, 300)
-    writeText("3 minutes", "freesansbold.ttf", 24, 380, 300)
-    writeText("Exit", "freesansbold.ttf", 24, 500, 300)
-    writeText("(costs 1 coin)", "freesansbold.ttf", 24, 160, 340)
-    writeText("(costs 2 coins)", "freesansbold.ttf", 24, 270, 340)
-    writeText("(costs 3 coins)", "freesansbold.ttf", 24, 380, 340)
+    writeText("2 minutes", "freesansbold.ttf", 24, 290, 300)
+    writeText("3 minutes", "freesansbold.ttf", 24, 425, 300)
+    writeText("Exit", "freesansbold.ttf", 24, 565, 300)
+    writeText("(costs 1 coin)", "freesansbold.ttf", 16, 160, 325)
+    writeText("(costs 2 coins)", "freesansbold.ttf", 16, 290, 325)
+    writeText("(costs 3 coins)", "freesansbold.ttf", 16, 425, 325)
     pygame.display.update()
 
     #Here we check the user's option choice
     while inside == True:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        print(mouse)
-        pygame.time.delay(20)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            if click[0] == 1:
-                if 100 <= mouse[0] <= 250 and 500 <= mouse[1] <= 600:
-                    print("START PATHFINDING STUFF HERE. ABOVE BUTTON CO-ORDINATES NEED TO BE CHANGED")
+            result = button (160, 300, 110, 50, result)
+            if result == True:
+                print("1 minute")
+            result = button(290, 300, 110, 50, result)
+            if result == True:
+                print("2 minutes")
+            result = button(425, 300, 110, 50, result)
+            if result == True:
+                print("3 minutes")
+            result = button(565, 300, 110, 25, result)
+            if result == True:
+                print("Exit")
+                return
+            # if click[0] == 1:
+            #      if 100 <= mouse[0] <= 250 and 500 <= mouse[1] <= 600:
+            #         print("START PATHFINDING STUFF HERE. ABOVE BUTTON CO-ORDINATES NEED TO BE CHANGED")
 
 #If the user clicks within the given co-ords, the passed function will run
-def button(x,y,w,h,action=None):
+def button(x,y,w,h,chosen):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    if x + w > mouse[0] > x and y + 48 > mouse[1] > y:
-        if click[0] == 1 and action != None:
-            action()
+    chosen = False
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        if click[0] == 1:
+            chosen = True
+    return chosen
 
 def quitGame():
     pygame.quit()
@@ -358,6 +380,7 @@ def writeText(text,fontType,fontSize,x,y):
 
 #Main menu function
 def gameIntro():
+    result = False
     intro = True
     while intro:
         for event in pygame.event.get():
@@ -366,8 +389,13 @@ def gameIntro():
                 quit()
             gameDisplay.fill(white)    
             gameDisplay.blit (startImg, (0,0))
-            button (5,526,105,48,gameLoop)
-            button (438,526,105,48,quitGame)
+            result = button (5,526,105,48,result)
+            if result == True:
+                return
+            result = button (438,526,105,48,result)
+            if result == True:
+                pygame.quit()
+                quit()
             pygame.display.update()
             clock.tick(15)
 
@@ -376,13 +404,10 @@ def gameLoop():
     #background = Level()
     gameDisplay.fill(white)
     pc.setImage("images/southfacing.png")
-    pc.setImage("southfacing.png")
     pc.setPosition(193,97)
     spriteGroup.add(pc)
-    
     for i in currentCoinGroup:
         i.setImage("images/coinone.png")
-        i.setImage("coinone.png")
 
     for i in currentCoinGroup:
         i.setPosition(350, 350)
@@ -437,5 +462,6 @@ c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Co
 coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
 currentCoinGroup.add(c1,c2,c3)
 gameIntro()
+gameLoop()
 pygame.quit()
 quit()
