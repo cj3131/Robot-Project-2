@@ -5,7 +5,7 @@ A mini RPG built with Python and pygame, where the player needs to collect barga
 Program requirements:
 Python 3.4 or later. Pygame library
 
-![screenshot](https://raw.githubusercontent.com/cj3131/C5-Robot-Project-2/master/mainMap.png)
+![screenshot](https://raw.githubusercontent.com/cj3131/C5-Robot-Project-2/master/images/mainmap.png)
 
 Group work requirements: (contributed to 75% of project marks)
 
