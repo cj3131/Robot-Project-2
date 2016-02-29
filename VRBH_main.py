@@ -90,7 +90,38 @@ class NPC(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.xchange = 0
         self.ychange = 0
+        
+#Pathfinding
+if pygame.mouse.get_pressed()[0]:
+    mouse_x,mouse_y = pygame.mouse.get_pos()
+    if selected:
+        unit.getRoute((mouse_x/800,mouse_y/600))
 
+#pathfinding code
+def getRoute(self,target):
+    self.shopkeeper.route = path((self.x/800,self.y/600), target)
+
+def getNode(self):
+    if self.shopkeeper.route:
+        self.shopkeeper.node = route.pop(0)
+        difference_x,difference_y = self.node[0] - self.shopkeeper.x, self.shopkeeper.node[1] - self.y
+        if difference_x > 0:
+            self.shopkeeper.vector_x = self.speed
+        if difference_x < 0:
+            self.shopkeeper.vector_x = self.speed * -1
+        else:
+            self.shopkeeper.vector_x = 0
+        if difference_y > 0:
+            self.shopkeeper.vector_y = self.speed
+        if difference_x < 0:
+            self.shopkeeper.vector_y = self.speed * -1
+        else:
+            self.shopkeeper.vector_y = 0
+    else:
+        self.shopkeeper.node = None
+        self.shopkeeper.vector_x = 0
+        self.shopkeeper.vector_y = 0        
+        
 class Coin(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -104,14 +135,7 @@ class Coin(pygame.sprite.Sprite):
     def setPosition(self,x,y):
         self.rect.x = x
         self.rect.y = y
-###     
-#Pathfinding
-if pygame.mouse.get_pressed()[0]:
-    mouse_x,mouse_y = pygame.mouse.get_pos()
-    if selected:
-        unit.getRoute((mouse_x/800,mouse_y/600))
-###
-
+        
 #Deals with the player character's movement, and changing of map quadrants
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -284,31 +308,6 @@ class Player(pygame.sprite.Sprite):
             xChange = 0
             yChange = 0
             print(self.rect)
-###            
-#pathfinding code
-def getRoute(self,target):
-    self.route = path((self.x/800,self.y/600), target)
-
-def getNode(self):
-    if self.route:
-        self.node = route.pop(0)
-        difference_x,difference_y = self.node[0] - self.x, self.node[1] - self.y
-        if difference_x > 0:
-            self.vector_x = self.speed
-        if difference_x < 0:
-            self.vector_x = self.speed * -1
-        else:
-            self.vector_x = 0
-        if difference_y > 0:
-            self.vector_y = self.speed
-        if difference_x < 0:
-            self.vector_y = self.speed * -1
-        else:
-            self.vector_y = 0
-    else:
-        self.node = None
-        self.vector_x = 0
-        self.vector_y = 0
 
 def update(self):
 
