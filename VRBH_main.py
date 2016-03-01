@@ -105,8 +105,8 @@ class NPC(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((32, 32))
         self.rect = self.image.get_rect()
-        self.xchange = 0
-        self.ychange = 0
+        self.xChange = 0
+        self.yChange = 0
 
     def setPosition(self, x, y):
         self.rect.x = x
@@ -139,12 +139,9 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((32, 32))
         self.rect = self.image.get_rect()
-        self.xchange = 0
-        self.ychange = 0
         #self.sound = pygame.mixer.Sound("walking.wav")
         self.sector = "topleft"
         self.collided = False
-        self.quadrant = (0,0)
         self.coins = 0
         self.collected = []
 
@@ -188,35 +185,64 @@ class Player(pygame.sprite.Sprite):
             
 
         if self.sector == "topleft":
+            if (c1 not in self.collected):
+                currentSpriteGroup.add(c1)
+            if (c2 not in self.collected):
+                currentSpriteGroup.add(c2)
+            if (c3 not in self.collected):
+                currentSpriteGroup.add(c3)
+
             if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
-                self.quadrant = (0,0)
                 
 
             elif (self.rect.x + xChange) > 769:
                 self.sector = "topright"
                 self.rect.x = -31
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c4 not in self.collected):
+                    currentSpriteGroup.add(c4)
+                currentSpriteGroup.add(pc)
             elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomleft"
                 self.rect.y = 225
                 self.collided = False
-            elif (self.rect.x == 545) and (self.rect.y == 289):
-                #check that coin is not in collected. if it is, pass. if it isn't,
+                currentSpriteGroup.empty()
+                print(currentSpriteGroup)
+                if (c7 not in self.collected):
+                    currentSpriteGroup.add(c7)
+                if (c8 not in self.collected):
+                    currentSpriteGroup.add(c8)
+                if (c9 not in self.collected):
+                    currentSpriteGroup.add(c9)
+                currentSpriteGroup.add(pc)
+
+                #check that coin is not in collected. if it is, pass. if it isn't, 
                 #add it to collected and currentSpriteGroup.  increase self.coins. 
                 #not yet implemented
-                print("you got a coin")
-                self.collected.append(c1)
-                print(self.collected)
             else:
                 self.collided = False
                 
         elif self.sector == "topright":
-            if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 65:
+            if (c4 not in self.collected):
+                currentSpriteGroup.add(c4)
+
+            if (self.rect.x == 353 or self.rect.x == 385) and (self.rect.y == 65):
+                pass
+            elif (self.rect.x == 353 and self.rect.y == 33 and xChange == 1) or (self.rect.x == 385 and self.rect.y == 33 and xChange == -1):
+                self.collided = False
+            elif (self.rect.x == 353 or self.rect.x == 385) and (self.rect.y == 33):
+                if xChange == 1 or xChange == -1 or yChange == -1 :
+                    print("collided")
+                    self.collided = True
+                else:
+                    self.collided = False
+
+            elif (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
-                self.quadrant = (-800,0)
 
             elif ( (self.rect.x == 609) and (193 < self.rect.y + yChange < 225) ) or ( (self.rect.x == 641) and (193 < self.rect.y + yChange < 225) ):
                 shopInterior(imgOne,shopImg)
@@ -227,40 +253,78 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "topleft"
                 self.rect.x = 801
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c1 not in self.collected):
+                    currentSpriteGroup.add(c1)
+                if (c2 not in self.collected):
+                    currentSpriteGroup.add(c2)
+                if (c3 not in self.collected):
+                    currentSpriteGroup.add(c3)
+                currentSpriteGroup.add(pc)
             elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomright"
                 self.rect.y = 225
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c5 not in self.collected):
+                    currentSpriteGroup.add(c5)
+                if (c6 not in self.collected):
+                    currentSpriteGroup.add(c6)
+                currentSpriteGroup.add(pc)
             else:
                 self.collided = False
 
         elif self.sector == "bottomleft":
+            if (c7 not in self.collected):
+                currentSpriteGroup.add(c7)
+            if (c8 not in self.collected):
+                currentSpriteGroup.add(c8)
+            if (c9 not in self.collected):
+                currentSpriteGroup.add(c9)
+
             if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
-                self.quadrant = (0,-352)
 
             elif ( (self.rect.x == 161) and (417 < self.rect.y + yChange < 449) ) or ( (self.rect.x == 193) and (417 < self.rect.y + yChange < 449) ):
                 shopInterior(imgOne,shopImg)
                 self.rect.x, self.rect.y = 161, 449
                 yChange = 1
 
-            elif (self.rect.x + xChange) > 768:
+            elif (self.rect.x + xChange) > 769:
                 self.sector = "bottomright"
                 self.rect.x = -31
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c5 not in self.collected):
+                    currentSpriteGroup.add(c5)
+                if (c6 not in self.collected):
+                    currentSpriteGroup.add(c6)
+                currentSpriteGroup.add(pc)
             elif (self.rect.y + yChange) < 1:
                 self.sector = "topleft"
                 self.rect.y = 353
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c1 not in self.collected):
+                    currentSpriteGroup.add(c1)
+                if (c2 not in self.collected):
+                    currentSpriteGroup.add(c2)
+                if (c3 not in self.collected):
+                    currentSpriteGroup.add(c3)
+                currentSpriteGroup.add(pc)
             else:
                 self.collided = False
 
         elif self.sector == "bottomright":
+            if (c5 not in self.collected):
+                currentSpriteGroup.add(c5)
+            if (c6 not in self.collected):
+                currentSpriteGroup.add(c6)
+
             if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
-                self.quadrant = (-800,-352)
 
             elif ((self.rect.x == 545) and (417 < self.rect.y + yChange < 449)) or ((self.rect.x == 577) and (417 < self.rect.y + yChange < 449)):
                 shopInterior(imgOne,shopImg)
@@ -271,57 +335,128 @@ class Player(pygame.sprite.Sprite):
                 self.sector = "bottomleft"
                 self.rect.x = 801
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c7 not in self.collected):
+                    currentSpriteGroup.add(c7)
+                if (c8 not in self.collected):
+                    currentSpriteGroup.add(c8)
+                if (c9 not in self.collected):
+                    currentSpriteGroup.add(c9)
+                currentSpriteGroup.add(pc)
             elif (self.rect.y + yChange) < 1:
                 self.sector = "topright"
                 self.rect.y = 353
                 self.collided = False
+                currentSpriteGroup.empty()
+                if (c4 not in self.collected):
+                    currentSpriteGroup.add(c4)
+                currentSpriteGroup.add(pc)
             else:
                 self.collided = False
 
 
         if self.collided == True:
             self.image = imgOne
-            gameDisplay.fill(white)
-            gameDisplay.blit(mapImg,(self.quadrant))
-            spriteGroup.draw(gameDisplay)
-            pygame.display.update()
+            update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
         else:
             while t < 31:
-
                 for i in range(4):
                     self.image = imgTwo
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range(4):
                     self.image = imgOne
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range(4):
                     self.image = imgThree
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
 
                 for i in range (4):
                     self.image = imgOne
-                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, spriteGroup, self.sector, mapImg, currentSpriteGroup)
+                    self.rect.x, self.rect.y = update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
                     pygame.time.delay(5)
                     t += 1
+
+            if self.sector == "topleft":
+                if pygame.sprite.collide_rect(pc,c1) and (c1 not in self.collected):
+                    print("You got c1")
+                    self.coins += 1
+                    self.collected.append(c1)
+                    c1.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+                elif pygame.sprite.collide_rect(pc,c2) and (c2 not in self.collected):
+                    print("You got c2")
+                    self.coins += 1
+                    self.collected.append(c2)
+                    c2.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+                elif pygame.sprite.collide_rect(pc,c3) and (c3 not in self.collected):
+                    print("You got c3")
+                    self.coins += 1
+                    self.collected.append(c3)
+                    c3.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+
+            elif self.sector == "topright":
+                if pygame.sprite.collide_rect(pc,c4) and (c4 not in self.collected):
+                    print("You got c4")
+                    self.coins += 1
+                    self.collected.append(c4)
+                    c4.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+
+            elif self.sector == "bottomleft":
+                if pygame.sprite.collide_rect(pc,c7) and (c7 not in self.collected):
+                    print("You got c7")
+                    self.coins += 1
+                    self.collected.append(c7)
+                    c7.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+                elif pygame.sprite.collide_rect(pc,c8) and (c8 not in self.collected):
+                    print("You got c8")
+                    self.coins += 1
+                    self.collected.append(c8)
+                    c8.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+                elif pygame.sprite.collide_rect(pc,c9) and (c9 not in self.collected):
+                    print("You got c9")
+                    self.coins += 1
+                    self.collected.append(c9)
+                    c9.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+
+            elif self.sector == "bottomright":
+                if pygame.sprite.collide_rect(pc,c5) and (c5 not in self.collected):
+                    print("You got c5")
+                    self.coins += 1
+                    self.collected.append(c5)
+                    c5.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+                elif pygame.sprite.collide_rect(pc,c6) and (c6 not in self.collected):
+                    print("You got c6")
+                    self.coins += 1
+                    self.collected.append(c6)
+                    c6.remove(currentSpriteGroup)
+                    update(self.rect.x, self.rect.y, xChange, yChange, self.sector, mapImg, currentSpriteGroup)
+
             xChange = 0
             yChange = 0
             print(self.rect)
 
 #This function should be called every time something happens, i.e when the character moves.
-def update(posx, posy, xChange, yChange, spriteGroup, sect, img, currentSpriteGroup):
+def update(posx, posy, xChange, yChange, sect, img, currentSpriteGroup):
     posx += xChange
     posy += yChange
     gameDisplay.fill(white)
-    #currentspriteGroup needs pc added
-    currentSpriteGroup.add(pc,c1,c2,c3)
+    #currentSpriteGroup needs pc added
+    #currentSpriteGroup.add(pc,c1,c2,c3)
 
     if sect == "topleft":
         gameDisplay.blit(img, (0,0))        
@@ -371,15 +506,28 @@ def shopInterior(player, shopBackground):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+
             result = button (160, 300, 110, 50, result)
             if result == True:
-                print("1 minute")
+                if pc.coins >= 1:
+                    print("You have enough coins. Searching for 1 minute")
+                else:
+                    print("You do not have enough coins.")
+
             result = button(290, 300, 110, 50, result)
             if result == True:
-                print("2 minutes")
+                if pc.coins >= 2:
+                    print("You have enough coins. Searching for 2 minutes")
+                else:
+                    print("You do not have enough coins.")
+
             result = button(425, 300, 110, 50, result)
             if result == True:
-                print("3 minutes")
+                if pc.coins >= 3:
+                    print("You have enough coins. Searching for 3 minutes")
+                else:
+                    print("You do not have enough coins.")
+
             result = button(565, 300, 110, 25, result)
             if result == True:
                 print("Exit")
@@ -435,8 +583,7 @@ def gameLoop():
     gameDisplay.fill(white)
     pc.setImage("images/southfacing.png")
     pc.setPosition(193, 97)
-    spriteGroup.add(pc)
-    for i in currentCoinGroup:
+    for i in coinGroup:
         i.setImage("images/coinone.png")
 
     # for i in currentCoinGroup:
@@ -450,11 +597,18 @@ def gameLoop():
 ##    gameDisplay.blit(coinImg, (385, 97))
 ##    gameDisplay.blit(coinImg, (673, 97))
 ##    gameDisplay.blit(coinImg, (545, 289))
-    spriteGroup.draw(gameDisplay)
+##    spriteGroup.draw(gameDisplay)
     c1.setPosition(545, 289)
     c2.setPosition(673, 97)
     c3.setPosition(385, 97)
-    currentCoinGroup.draw(gameDisplay)
+    c4.setPosition(353, 33)
+    c5.setPosition(225, 417)
+    c6.setPosition(1, 257)
+    c7.setPosition(737, 449)
+    c8.setPosition(481, 449)
+    c9.setPosition(513, 257)
+##    currentCoinGroup.draw(gameDisplay)
+    currentSpriteGroup.draw(gameDisplay)
     pygame.display.update()
     run = True
     while run:
@@ -483,17 +637,17 @@ def gameLoop():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     moving = None
-
-        # if moving == None:
-        #     spriteGroup.draw(gameDisplay)
-        #     pygame.display.update()
-
         clock.tick(fps)
         
 pc = Player()
 c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin()
+
 coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
-currentCoinGroup.add(c1,c2,c3)
+
+#currentCoinGroup.add(c1,c2,c3)
+spriteGroup.add(pc)
+currentSpriteGroup.add(pc,c1,c2,c3)
+
 gameIntro()
 gameLoop()
 pygame.quit()
