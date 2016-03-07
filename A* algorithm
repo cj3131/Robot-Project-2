@@ -1,0 +1,31 @@
+
+#Pathfinding
+if pygame.mouse.get_pressed()[0]:
+    mouse_x,mouse_y = pygame.mouse.get_pos()
+    if selected:
+        unit.getRoute((mouse_x/800,mouse_y/600))
+
+#pathfinding code
+def getRoute(self,target):
+    self.shopkeeper.route = path((self.x/800,self.y/600), target)
+
+def getNode(self):
+    if self.shopkeeper.route:
+        self.shopkeeper.node = route.pop(0)
+        difference_x,difference_y = self.node[0] - self.shopkeeper.x, self.shopkeeper.node[1] - self.y
+        if difference_x > 0:
+            self.shopkeeper.vector_x = self.speed
+        if difference_x < 0:
+            self.shopkeeper.vector_x = self.speed * -1
+        else:
+            self.shopkeeper.vector_x = 0
+        if difference_y > 0:
+            self.shopkeeper.vector_y = self.speed
+        if difference_x < 0:
+            self.shopkeeper.vector_y = self.speed * -1
+        else:
+            self.shopkeeper.vector_y = 0
+    else:
+        self.shopkeeper.node = None
+        self.shopkeeper.vector_x = 0
+        self.shopkeeper.vector_y = 0        
