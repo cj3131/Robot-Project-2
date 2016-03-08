@@ -2,7 +2,9 @@ import pygame
 import time
 import random
 from pygame import *
-
+from BubbleSort import Laptop
+from BubbleSort import Phone
+from BubbleSort import Console
 displayWidth = 800
 displayHeight = 600
 halfWidth = 400
@@ -342,7 +344,7 @@ class Player(pygame.sprite.Sprite):
                 self.collided = True
 
             elif ((self.rect.x == 545) and (417 < self.rect.y + yChange < 449)) or ((self.rect.x == 577) and (417 < self.rect.y + yChange < 449)):
-                shopInterior(imgOne,shopImg)
+                shopInterior(imgOne,shopImg,"laptop")
                 self.rect.x, self.rect.y = 577,449
                 yChange = 1
 
@@ -489,7 +491,7 @@ def update(posx, posy, xChange, yChange, sect, img, currentSpriteGroup):
     return posx, posy
 
 #This function should run when entering a shop. 
-def shopInterior(player, shopBackground):
+def shopInterior(player, shopBackground, Type):
     inside = True
     result = False
     pc.rect.x = 417
