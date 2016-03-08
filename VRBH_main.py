@@ -31,8 +31,8 @@ fps = 60
 
 spriteGroup = pygame.sprite.Group()
 coinGroup = pygame.sprite.Group()
-currentCoinGroup = pygame.sprite.Group()
 currentSpriteGroup = pygame.sprite.Group()
+itemGroup = pygame.sprite.Group()
 
 #Load player character, NPC, map, menu, and other interface images
 eastImg = pygame.image.load('images/eastfacing.png')
@@ -116,19 +116,32 @@ class NPC(pygame.sprite.Sprite):
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
 
-
-#A sprite to be used in detecting when the player character picks up a coin. (Not implemented yet)
-class Coin(pygame.sprite.Sprite):
+class Item(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((32,32))
+        self.image = pygame.Surface((32, 32))
         self.rect = self.image.get_rect()
 
     def setImage(self, filename):
         self.image = pygame.image.load(filename)
         self.rect = self.image.get_rect()
 
-    def setPosition(self,x,y):
+    def setPosition(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+
+#A sprite to be used in detecting when the player character picks up a coin. (Not implemented yet)
+class Coin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((32, 32))
+        self.rect = self.image.get_rect()
+
+    def setImage(self, filename):
+        self.image = pygame.image.load(filename)
+        self.rect = self.image.get_rect()
+
+    def setPosition(self, x, y):
         self.rect.x = x
         self.rect.y = y
         
@@ -158,7 +171,9 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, direction):
         t = 0
-        if direction == "west":
+        if direction == None:
+            return
+        elif direction == "west":
             imgOne = westImg
             imgTwo = westLeftImg
             imgThree = westRightImg
@@ -511,6 +526,7 @@ def shopInterior(player, shopBackground):
             if result == True:
                 if pc.coins >= 1:
                     print("You have enough coins. Searching for 1 minute")
+                    # Get rid of the scroll and show item images here
                 else:
                     print("You do not have enough coins.")
 
@@ -579,25 +595,12 @@ def gameIntro():
 
 
 def gameLoop():
-    #background = Level()
-    gameDisplay.fill(white)
+    
     pc.setImage("images/southfacing.png")
     pc.setPosition(193, 97)
     for i in coinGroup:
         i.setImage("images/coinone.png")
 
-    # for i in currentCoinGroup:
-    #     i.setPosition(350, 350)
-    
-    facing = southImg
-    moving = None
-    x = (displayWidth * 0.45)
-    y = (displayHeight * 0.8)
-    gameDisplay.blit(mapImg,(0,0))
-##    gameDisplay.blit(coinImg, (385, 97))
-##    gameDisplay.blit(coinImg, (673, 97))
-##    gameDisplay.blit(coinImg, (545, 289))
-##    spriteGroup.draw(gameDisplay)
     c1.setPosition(545, 289)
     c2.setPosition(673, 97)
     c3.setPosition(385, 97)
@@ -607,9 +610,12 @@ def gameLoop():
     c7.setPosition(737, 449)
     c8.setPosition(481, 449)
     c9.setPosition(513, 257)
-##    currentCoinGroup.draw(gameDisplay)
+
+    gameDisplay.fill(white)
+    gameDisplay.blit(mapImg, (0, 0))
     currentSpriteGroup.draw(gameDisplay)
     pygame.display.update()
+    direction = None
     run = True
     while run:
         for event in pygame.event.get():
@@ -619,32 +625,24 @@ def gameLoop():
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    facing = westImg
-                    moving = True
-                    pc.move("west")
+                    direction = "west"
                 if event.key == pygame.K_RIGHT:
-                    facing = eastImg
-                    moving = True
-                    pc.move("east")
+                    direction = "east"
                 if event.key == pygame.K_UP:
-                    facing = northImg
-                    moving = True
-                    pc.move("north")
+                    direction = "north"
                 if event.key == pygame.K_DOWN:
-                    facing = southImg
-                    moving = True
-                    pc.move("south")
+                    direction = "south"
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                    moving = None
+                    direction = None
+        pc.move(direction)
         clock.tick(fps)
         
 pc = Player()
 c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin()
-
+i1,i2,i3,i4,i5 = Item(),Item(),Item(),Item(),Item()
+itemGroup.add(i1,i2,i3,i4,i5)
 coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
-
-#currentCoinGroup.add(c1,c2,c3)
 spriteGroup.add(pc)
 currentSpriteGroup.add(pc,c1,c2,c3)
 
