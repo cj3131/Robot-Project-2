@@ -262,7 +262,7 @@ class Player(pygame.sprite.Sprite):
                 self.collided = True
 
             elif ( (self.rect.x == 609) and (193 < self.rect.y + yChange < 225) ) or ( (self.rect.x == 641) and (193 < self.rect.y + yChange < 225) ):
-                shopInterior(imgOne,shopImg)
+                shopInterior(imgOne,shopImg,"phones")
                 self.rect.x, self.rect.y = 641,193
                 yChange = 1
 
@@ -803,8 +803,8 @@ def shopInterior(player, shopBackground, Type):
                                 pygame.display.update()
                                 pygame.time.delay(50)
 
-                            i2.remove(itemGroup)
-                            itemGroup.update
+                        i2.remove(itemGroup)
+                        itemGroup.update
 
                         while i5.rect.x < shopkeeper.rect.x or  i5.rect.x > shopkeeper.rect.x:
                             gameDisplay.fill(white)
@@ -837,13 +837,14 @@ def shopInterior(player, shopBackground, Type):
                                 pygame.display.update()
                                 pygame.time.delay(50)
 
-                            i5.remove(itemGroup)
-                            itemGroup.update
-                            gameDisplay.fill(white)
-                            .blit(shopBackground, (0,0))
-                            spriteGroup.draw(gameDisplay)
-                            itemGroup.draw(gameDisplay)
-                            pygame.display.update()
+                        i5.remove(itemGroup)
+                        itemGroup.update
+
+                        gameDisplay.fill(white)
+                        gameDisplay.blit(shopBackground, (0,0))
+                        spriteGroup.draw(gameDisplay)
+                        itemGroup.draw(gameDisplay)
+                        pygame.display.update()
                             
                         while i6.rect.x < shopkeeper.rect.x or  i6.rect.x > shopkeeper.rect.x:
                                 gameDisplay.fill(white)
@@ -876,8 +877,8 @@ def shopInterior(player, shopBackground, Type):
                                     pygame.display.update()
                                     pygame.time.delay(50)
 
-                                i6.remove(itemGroup)
-                                itemGroup.update
+                        i6.remove(itemGroup)
+                        itemGroup.update
 
                         while i4.rect.x < shopkeeper.rect.x or  i4.rect.x > shopkeeper.rect.x:
                                 gameDisplay.fill(white)
@@ -915,8 +916,8 @@ def shopInterior(player, shopBackground, Type):
                                     itemGroup.draw(gameDisplay)
                                     pygame.display.update()
 
-                                i4.remove(itemGroup)
-                                itemGroup.update
+                        i4.remove(itemGroup)
+                        itemGroup.update
                                     
                         while i1.rect.x < shopkeeper.rect.x or  i1.rect.x > shopkeeper.rect.x:
                                 gameDisplay.fill(white)
@@ -949,8 +950,8 @@ def shopInterior(player, shopBackground, Type):
                                                 pygame.display.update()
                                                 pygame.time.delay(50)
 
-                                i1.remove(itemGroup)
-                                itemGroup.update
+                        i1.remove(itemGroup)
+                        itemGroup.update
 
                         while i3.rect.x < shopkeeper.rect.x or  i3.rect.x > shopkeeper.rect.x:
                             gameDisplay.fill(white)
@@ -988,8 +989,8 @@ def shopInterior(player, shopBackground, Type):
                                         itemGroup.draw(gameDisplay)
                                         pygame.display.update()
 
-                            i3.remove(itemGroup)
-                            itemGroup.update
+                        i3.remove(itemGroup)
+                        itemGroup.update
 
                             
                 else:
