@@ -1,10 +1,7 @@
 import pygame
 import time
 import random
-from pygame import *
-from BubbleSort import Laptop
-from BubbleSort import Phone
-from BubbleSort import Console
+from pygame import * 
 displayWidth = 800
 displayHeight = 600
 halfWidth = 400
@@ -217,9 +214,9 @@ class Player(pygame.sprite.Sprite):
                 #add it to collected and currentSpriteGroup.  increase self.coins. 
                 #not yet implemented
             else:
-                self.collided = False
-                
+                self.collided = False      
         elif self.sector == "topright":
+            currentSpriteGroup.add(checkout)
             if (c4 not in self.collected):
                 currentSpriteGroup.add(c4)
 
@@ -470,7 +467,16 @@ def update(posx, posy, xChange, yChange, sect, img, currentSpriteGroup):
     pygame.display.update()
 
     return posx, posy
+#bubblesort function
 
+def bubblesort (alist):
+    for passnum in range(len(alist)-1,0,-1):
+                          for i in range (passnum):
+                            if alist[i]>alist[i+1]:
+                                temp = alist[i]
+                                alist[i] = alist[i+1]
+                                alist[i+1] = temp
+    return(alist)
 #This function should run when entering a shop. 
 def shopInterior(player, shopBackground, itemtype):
     inside = True
@@ -1009,7 +1015,35 @@ def shopInterior(player, shopBackground, itemtype):
                 print("Exit")
                 shopkeeper.remove(spriteGroup)
                 return
-
+# end game sorting. 
+def collected_items():
+    newlist=[]
+    i = 0
+    result = None
+    mapImg = pygame.image.load("images/mainmap.png")
+    scrollImg = pygame.image.load("images/scrollhorizontal.png")
+    gameDisplay.blit(mapImg,(-800,0))
+    currentSpriteGroup.draw(gameDisplay)
+    gameDisplay.blit(scrollImg,(80,0))
+    writeText("Here are your items so far", "freesansbold.ttf", 36, 160, 80)
+    writeText("Price", "freesansbold.ttf", 36, 160, 500)
+    for event in pygame.event.get():
+        result = button (160, 500, 110, 50, result)
+        if result == True:
+            f = open ('collecteditems','r')
+            for line in f:
+                i = line
+                newlist.append (i[2])
+                i += 1
+                f.close()
+                bubblesort(newlist)
+                writeText(str(newlist),"freesansbold.ttf",160,100)
+        writeText("Exit", "freesansbold.ttf", 36, 600, 500)
+        result = button(600,500,110,50,result)
+        if result == True:
+            return
+            
+                
 def coincollecting(posx, posy, item):
     while item.rect.x < shopkeeper.rect.x or  item.rect.x > shopkeeper.rect.x:
         if item.rect.x < shopkeeper.rect.x:
@@ -1039,6 +1073,7 @@ def coincollecting(posx, posy, item):
                 itemGroup.draw(gameDisplay)
                 pygame.display.update()
                 pygame.time.delay(500)
+                
 #If the user clicks within the given co-ords, the passed function will run
 def button(x,y,w,h,chosen):
     mouse = pygame.mouse.get_pos()
@@ -1129,12 +1164,16 @@ def gameLoop():
                     direction = "north"
                 if event.key == pygame.K_DOWN:
                     direction = "south"
+                if event.key == pygame.K_SPACE:
+                    collected_items()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     direction = None
         direction = pc.move(direction)
         clock.tick(fps)
-        
+alist = [2,1,4]
+bubblesort(alist)
+print(alist)
 pc = Player()
 c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin()
 i1,i2,i3,i4,i5,i6 = Item(),Item(),Item(),Item(),Item(),Item()
@@ -1142,7 +1181,9 @@ itemGroup.add(i1,i2,i3,i4,i5,i6)
 coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
 spriteGroup.add(pc)
 currentSpriteGroup.add(pc,c1,c2,c3)
-
+checkout = NPC ()
+checkout.setImage("images/coinone.png")
+checkout.setPosition(129,257)
 gameIntro()
 gameLoop()
 pygame.quit()
