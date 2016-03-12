@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import sys
 from pygame import * 
 displayWidth = 800
 displayHeight = 600
@@ -182,12 +183,9 @@ class Player(pygame.sprite.Sprite):
                 currentSpriteGroup.add(c2)
             if (c3 not in self.collected):
                 currentSpriteGroup.add(c3)
-
             if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
-                
-
             elif (self.rect.x + xChange) > 769:
                 self.sector = "topright"
                 self.rect.x = -31
@@ -195,13 +193,12 @@ class Player(pygame.sprite.Sprite):
                 currentSpriteGroup.empty()
                 if (c4 not in self.collected):
                     currentSpriteGroup.add(c4)
-                currentSpriteGroup.add(pc)
+                currentSpriteGroup.add(pc, checkout)
             elif (self.rect.y + yChange) > 577:
                 self.sector = "bottomleft"
                 self.rect.y = 225
                 self.collided = False
                 currentSpriteGroup.empty()
-                print(currentSpriteGroup)
                 if (c7 not in self.collected):
                     currentSpriteGroup.add(c7)
                 if (c8 not in self.collected):
@@ -209,17 +206,12 @@ class Player(pygame.sprite.Sprite):
                 if (c9 not in self.collected):
                     currentSpriteGroup.add(c9)
                 currentSpriteGroup.add(pc)
-
-                #check that coin is not in collected. if it is, pass. if it isn't, 
-                #add it to collected and currentSpriteGroup.  increase self.coins. 
-                #not yet implemented
             else:
-                self.collided = False      
+                self.collided = False
+
         elif self.sector == "topright":
-            currentSpriteGroup.add(checkout)
             if (c4 not in self.collected):
                 currentSpriteGroup.add(c4)
-
             if (self.rect.x == 353 or self.rect.x == 385) and (self.rect.y == 65):
                 pass
             elif (self.rect.x == 353 and self.rect.y == 33 and xChange == 1) or (self.rect.x == 385 and self.rect.y == 33 and xChange == -1):
@@ -230,17 +222,14 @@ class Player(pygame.sprite.Sprite):
                     self.collided = True
                 else:
                     self.collided = False
-
             elif (self.rect.x + xChange) > 705 or (self.rect.y + yChange) < 65:
                 print("collided")
                 self.collided = True
-
             elif ( (self.rect.x == 609) and (193 < self.rect.y + yChange < 225) ) or ( (self.rect.x == 641) and (193 < self.rect.y + yChange < 225) ):
                 shopInterior(imgOne,shopImg,"phones")
                 self.rect.x, self.rect.y = 641,225
                 yChange = 1
                 direction = None
-
             elif (self.rect.x + xChange) < 1:
                 self.sector = "topleft"
                 self.rect.x = 801
@@ -273,17 +262,14 @@ class Player(pygame.sprite.Sprite):
                 currentSpriteGroup.add(c8)
             if (c9 not in self.collected):
                 currentSpriteGroup.add(c9)
-
             if (self.rect.x + xChange) < 65 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
-
             elif ( (self.rect.x == 161) and (417 < self.rect.y + yChange < 449) ) or ( (self.rect.x == 193) and (417 < self.rect.y + yChange < 449) ):
-                shopInterior(imgOne,shopImg,"games")
+                shopInterior(imgOne,shopImg,"consoles")
                 self.rect.x, self.rect.y = 161, 449
                 yChange = 1
                 direction = None
-
             elif (self.rect.x + xChange) > 769:
                 self.sector = "bottomright"
                 self.rect.x = -31
@@ -314,17 +300,14 @@ class Player(pygame.sprite.Sprite):
                 currentSpriteGroup.add(c5)
             if (c6 not in self.collected):
                 currentSpriteGroup.add(c6)
-
             if (self.rect.x + xChange) > 705 or (self.rect.y + yChange) > 481:
                 print("collided")
                 self.collided = True
-
             elif ((self.rect.x == 545) and (417 < self.rect.y + yChange < 449)) or ((self.rect.x == 577) and (417 < self.rect.y + yChange < 449)):
                 shopInterior(imgOne,shopImg,"laptop")
                 self.rect.x, self.rect.y = 577,449
                 yChange = 1
                 direction = None
-
             elif (self.rect.x + xChange) < 1:
                 self.sector = "bottomleft"
                 self.rect.x = 801
@@ -344,7 +327,7 @@ class Player(pygame.sprite.Sprite):
                 currentSpriteGroup.empty()
                 if (c4 not in self.collected):
                     currentSpriteGroup.add(c4)
-                currentSpriteGroup.add(pc)
+                currentSpriteGroup.add(pc, checkout)
             else:
                 self.collided = False
 
@@ -450,8 +433,6 @@ def update(posx, posy, xChange, yChange, sect, img, currentSpriteGroup):
     posx += xChange
     posy += yChange
     gameDisplay.fill(white)
-    #currentSpriteGroup needs pc added
-    #currentSpriteGroup.add(pc,c1,c2,c3)
 
     if sect == "topleft":
         gameDisplay.blit(img, (0,0))        
@@ -462,13 +443,11 @@ def update(posx, posy, xChange, yChange, sect, img, currentSpriteGroup):
     elif sect == "bottomright":
         gameDisplay.blit(img, (-800,-352))
 
-    #spriteGroup.draw(gameDisplay)
     currentSpriteGroup.draw(gameDisplay)
     pygame.display.update()
-
     return posx, posy
-#bubblesort function
 
+#bubblesort function
 def bubblesort (alist):
     for passnum in range(len(alist)-1,0,-1):
                           for i in range (passnum):
@@ -477,6 +456,7 @@ def bubblesort (alist):
                                 alist[i] = alist[i+1]
                                 alist[i+1] = temp
     return(alist)
+
 #This function should run when entering a shop. 
 def shopInterior(player, shopBackground, itemtype):
     inside = True
@@ -489,6 +469,23 @@ def shopInterior(player, shopBackground, itemtype):
     shopkeeper = NPC()
     shopkeeper.setImage("images/shopkeepsouthfacing.png")
     shopkeeper.setPosition(416, 481)
+
+    if itemtype == "laptop":
+        for i in itemGroup:
+            i.setImage ("images/computer.png")
+    elif itemtype == "consoles":
+        for i in itemGroup:
+            i.setImage("images/console.png")
+    elif itemtype == "phones":
+        for i in itemGroup:
+            i.setImage("images/phone.png")
+    i1.setPosition(97, 97)
+    i2.setPosition(417, 417)
+    i3.setPosition(65, 97)
+    i4.setPosition(97, 129)
+    i5.setPosition(257, 129)
+    i6.setPosition(193, 161)
+
     spriteGroup.add(shopkeeper)
     spriteGroup.draw(gameDisplay)
     writeText("Hello. How long do you", "freesansbold.ttf", 36, 160,80)
@@ -510,6 +507,7 @@ def shopInterior(player, shopBackground, itemtype):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit("Exiting")
                 quit()
 
             result = button (160, 300, 110, 50, result)
@@ -591,8 +589,8 @@ def shopInterior(player, shopBackground, itemtype):
                         f = open('laptoplist', 'r')
                     elif itemtype == "phones":
                         f = open('phonelist', 'r')
-                    elif itemtype == "games":
-                        f = open('gamelist', 'r')
+                    elif itemtype == "consoles":
+                        f = open('consolelist', 'r')
                     j = 0
                     fcollected = open("collecteditems", "w")
                     for line in f:
@@ -602,6 +600,7 @@ def shopInterior(player, shopBackground, itemtype):
                             break
                     fcollected.close()
                     f.close()
+                    shopkeeper.remove(spriteGroup)
                     #fcollected = open('collecteditems', 'r')
                     #text = fcollected.read()
                     #print(text)
@@ -759,8 +758,8 @@ def shopInterior(player, shopBackground, itemtype):
                             f = open('laptoplist', 'r')
                         elif itemtype == "phones":
                             f = open('phonelist', 'r')
-                        elif itemtype == "games":
-                            f = open('gamelist', 'r')
+                        elif itemtype == "consoles":
+                            f = open('consolelist', 'r')
 
                         j = 0
                         fcollected = open("collecteditems", "w")
@@ -771,6 +770,7 @@ def shopInterior(player, shopBackground, itemtype):
                                 break
                         fcollected.close()
                         f.close()
+                        shopkeeper.remove(spriteGroup)
                         return
 
                     else:
@@ -993,8 +993,8 @@ def shopInterior(player, shopBackground, itemtype):
                         f = open('laptoplist', 'r')
                     elif itemtype == "phones":
                         f = open('phonelist', 'r')
-                    elif itemtype == "games":
-                        f = open('gamelist', 'r')
+                    elif itemtype == "consoles":
+                        f = open('consolelist', 'r')
                         
                     j = 0
                     fcollected = open("collecteditems", "w")
@@ -1005,6 +1005,7 @@ def shopInterior(player, shopBackground, itemtype):
                             break
                     fcollected.close()
                     f.close()
+                    shopkeeper.remove(spriteGroup)
                     return
                             
                 else:
@@ -1015,33 +1016,49 @@ def shopInterior(player, shopBackground, itemtype):
                 print("Exit")
                 shopkeeper.remove(spriteGroup)
                 return
+
 # end game sorting. 
 def collected_items():
     newlist=[]
     i = 0
     result = None
-    mapImg = pygame.image.load("images/mainmap.png")
-    scrollImg = pygame.image.load("images/scrollhorizontal.png")
+    showingCollected = True
+    #mapImg = pygame.image.load("images/mainmap.png")
+    #scrollImg = pygame.image.load("images/scrollhorizontal.png")
+    gameDisplay.fill(white)
     gameDisplay.blit(mapImg,(-800,0))
     currentSpriteGroup.draw(gameDisplay)
     gameDisplay.blit(scrollImg,(80,0))
     writeText("Here are your items so far", "freesansbold.ttf", 36, 160, 80)
     writeText("Price", "freesansbold.ttf", 36, 160, 500)
-    for event in pygame.event.get():
-        result = button (160, 500, 110, 50, result)
-        if result == True:
-            f = open ('collecteditems','r')
-            for line in f:
-                i = line
-                newlist.append (i[2])
-                i += 1
+    writeText("Exit", "freesansbold.ttf", 36, 600, 500)
+    pygame.display.update()
+    print("Got to here")
+    while showingCollected == True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                showingCollected = False
+                pygame.quit()
+                sys.exit("Exiting")
+                quit()
+            result = button (160, 500, 110, 50, result)
+            if result == True:
+                f = open ('collecteditems','r')
+                for line in f:
+                    i = line
+                    newlist.append(i[2])
                 f.close()
                 bubblesort(newlist)
-                writeText(str(newlist),"freesansbold.ttf",160,100)
-        writeText("Exit", "freesansbold.ttf", 36, 600, 500)
-        result = button(600,500,110,50,result)
-        if result == True:
-            return
+                gameDisplay.fill(white)
+                gameDisplay.blit(mapImg, (-800, 0))
+                currentSpriteGroup.draw(gameDisplay)
+                gameDisplay.blit(scrollImg, (80, 0))
+                writeText(str(newlist),"freesansbold.ttf",36,160,100)
+                pygame.display.update()
+            result = button(600,500,110,50,result)
+            if result == True:
+                update(pc.rect.x, pc.rect.y, 0, 0, "topright", mapImg, currentSpriteGroup)
+                return
             
                 
 def coincollecting(posx, posy, item):
@@ -1084,11 +1101,7 @@ def button(x,y,w,h,chosen):
             chosen = True
     return chosen
 
-def quitGame():
-    pygame.quit()
-    quit()
-
-#Guess what this does
+#Writes text in specified location
 def writeText(text,fontType,fontSize,x,y):
     font = pygame.font.Font(fontType, fontSize)
     text = font.render(text, 1, (10,10,10))
@@ -1104,6 +1117,7 @@ def gameIntro():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit("Exiting")
                 quit()
             gameDisplay.fill(white)    
             gameDisplay.blit (startImg, (0,0))
@@ -1113,6 +1127,7 @@ def gameIntro():
             result = button (438,526,105,48,result)
             if result == True:
                 pygame.quit()
+                sys.exit("Exiting")
                 quit()
             pygame.display.update()
             clock.tick(15)
@@ -1121,12 +1136,14 @@ def gameIntro():
 def gameLoop():
     
     pc.setImage("images/southfacing.png")
-    pc.setPosition(193, 97)
     for i in coinGroup:
         i.setImage("images/coinone.png")
     for i in itemGroup:
         i.setImage ("images/coinone.png")
-    
+    checkout.setImage("images/checkout.png")
+
+    pc.setPosition(193, 97)
+    checkout.setPosition(129, 257)
     c1.setPosition(545, 289)
     c2.setPosition(673, 97)
     c3.setPosition(385, 97)
@@ -1136,12 +1153,7 @@ def gameLoop():
     c7.setPosition(737, 449)
     c8.setPosition(481, 449)
     c9.setPosition(513, 257)
-    i1.setPosition(97, 97)
-    i2.setPosition(417, 417)
-    i3.setPosition(65, 97)
-    i4.setPosition(97, 129)
-    i5.setPosition(257, 129)
-    i6.setPosition(193, 161)
+    
 
     gameDisplay.fill(white)
     gameDisplay.blit(mapImg, (0, 0))
@@ -1154,6 +1166,7 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+                sys.exit("Exiting")
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -1165,26 +1178,31 @@ def gameLoop():
                 if event.key == pygame.K_DOWN:
                     direction = "south"
                 if event.key == pygame.K_SPACE:
-                    collected_items()
+                    if pc.rect.x == 129 and pc.rect.y == 289:
+                        collected_items()
+                        direction = None
+                    else:
+                        direction = None
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                     direction = None
         direction = pc.move(direction)
         clock.tick(fps)
-alist = [2,1,4]
-bubblesort(alist)
-print(alist)
+
 pc = Player()
 c1,c2,c3,c4,c5,c6,c7,c8,c9 = Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin(),Coin()
 i1,i2,i3,i4,i5,i6 = Item(),Item(),Item(),Item(),Item(),Item()
+checkout = NPC()
+
 itemGroup.add(i1,i2,i3,i4,i5,i6)
 coinGroup.add(c1,c2,c3,c4,c5,c6,c7,c8,c9)
 spriteGroup.add(pc)
 currentSpriteGroup.add(pc,c1,c2,c3)
-checkout = NPC ()
-checkout.setImage("images/coinone.png")
-checkout.setPosition(129,257)
+
+
+
 gameIntro()
 gameLoop()
 pygame.quit()
+sys.exit("Exiting")
 quit()
