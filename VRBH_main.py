@@ -3,10 +3,7 @@ import time
 import random
 import sys
 import csv
-from pygame import *
-pygame.init()
-#intro and backgroun music
-pygame.mixer.music.load("intro.wav")
+from pygame import * 
 displayWidth = 800
 displayHeight = 600
 halfWidth = 400
@@ -1164,7 +1161,6 @@ def writeText(text,fontType,fontSize,x,y):
     gameDisplay.blit(text, textRect)
 
 #Main menu function
-pygame.mixer.music.play(1)
 def gameIntro():
     result = False
     intro = True
@@ -1189,7 +1185,7 @@ def gameIntro():
 
 
 def gameLoop():
-    pygame.mixer.music.play(-1)
+    
     pc.setImage("images/southfacing.png")
     for i in coinGroup:
         i.setImage("images/coinone.png")
